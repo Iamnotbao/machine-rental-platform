@@ -1,0 +1,57 @@
+.input {
+
+display:flex;
+
+padding:12px;
+
+border-top:
+1px solid #eee;
+
+gap:8px;
+
+}
+
+
+
+.input input {
+
+flex:1;
+
+border:
+
+1px solid #ddd;
+
+
+border-radius:12px;
+
+padding:10px;
+
+outline:none;
+
+}
+
+
+
+.input button {
+
+
+border:none;
+
+
+background:
+var(--color-primary);
+
+
+color:white;
+
+
+padding:
+0 16px;
+
+
+border-radius:12px;
+
+
+cursor:pointer;
+
+}

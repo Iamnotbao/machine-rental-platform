@@ -93,6 +93,11 @@
   text-decoration: none;
   width: 1.7rem;
 }
+.actions {
+  display:flex;
+  align-items:center;
+  gap:16px;
+}
 @media (max-width: 46rem) {
   .footerGrid {
     grid-template-columns: 1fr 1fr;

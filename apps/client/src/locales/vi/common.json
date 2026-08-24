@@ -1,0 +1,38 @@
+{
+  "common": {
+    "home": "Trang chủ",
+    "machines": "Máy cho thuê",
+    "services": "Dịch vụ",
+    "about": "Giới thiệu",
+    "contact": "Liên hệ",
+    "login": "Đăng nhập",
+    "register": "Đăng ký",
+    "rent_now": "Thuê ngay"
+  },
+
+  "hero": {
+    "title": "Thuê máy chuyên nghiệp dễ dàng",
+    "description": "Cung cấp giải pháp máy móc chất lượng cao cho mọi nhu cầu vận hành.",
+    "explore": "Khám phá máy",
+    "learn_more": "Tìm hiểu thêm"
+  },
+
+  "machine": {
+    "featured": "Máy nổi bật",
+    "view_detail": "Xem chi tiết",
+    "rental_price": "Giá thuê"
+  },
+
+  "stats": {
+    "machines": "Máy đang có",
+    "customers": "Khách hàng",
+    "experience": "Kinh nghiệm",
+    "support": "Hỗ trợ"
+  },
+
+  "chat": {
+    "title": "Trợ lý AI",
+    "placeholder": "Nhập câu hỏi của bạn...",
+    "welcome": "Xin chào! Tôi có thể hỗ trợ gì cho bạn?"
+  }
+}

@@ -1,0 +1,39 @@
+.button {
+
+ width:52px;
+ height:52px;
+
+ border-radius:50%;
+
+
+ display:flex;
+ align-items:center;
+ justify-content:center;
+
+
+ background:#1877f2;
+
+ color:white;
+
+
+ font-size:26px;
+
+ font-weight:700;
+
+
+ text-decoration:none;
+
+
+ transition:.25s ease;
+
+}
+
+
+
+.button:hover {
+
+ transform:
+ translateY(-4px)
+ scale(1.05);
+
+}

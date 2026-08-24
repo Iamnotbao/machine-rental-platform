@@ -1,0 +1,48 @@
+.wrapper {
+
+display:flex;
+
+align-items:center;
+
+gap:4px;
+
+}
+
+
+.wrapper button {
+
+border:none;
+
+background:transparent;
+
+cursor:pointer;
+
+padding:6px 10px;
+
+border-radius:8px;
+
+
+font-size:14px;
+
+
+transition:.25s ease;
+
+}
+
+
+.wrapper button:hover {
+
+background:
+var(--color-surface);
+
+}
+
+
+.active {
+
+background:
+var(--color-primary)!important;
+
+color:white;
+
+}

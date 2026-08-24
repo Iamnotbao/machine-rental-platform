@@ -1,6 +1,8 @@
 import { Outlet } from 'react-router-dom';
 import { Footer } from '@/components/layout/Footer';
 import { Header } from '@/components/layout/Header';
+import FloatingActions 
+from "@/components/common/FloatingActions/FloatingActions";
 
 export function MainLayout() {
   return (
@@ -10,6 +12,7 @@ export function MainLayout() {
         <Outlet />
       </main>
       <Footer />
+       <FloatingActions />
     </div>
   );
 }

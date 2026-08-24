@@ -1,0 +1,31 @@
+{
+  "common": {
+    "home": "Home",
+    "machines": "Machines",
+    "services": "Services",
+    "about": "About",
+    "contact": "Contact",
+    "login": "Login",
+    "register": "Register",
+    "rent_now": "Rent Now"
+  },
+
+  "hero": {
+    "title": "Rent professional machines easily",
+    "description": "Providing high quality equipment solutions for every operation.",
+    "explore": "Explore Machines",
+    "learn_more": "Learn More"
+  },
+
+  "machine": {
+    "featured": "Featured Machines",
+    "view_detail": "View Detail",
+    "rental_price": "Rental Price"
+  },
+
+  "chat": {
+    "title": "AI Assistant",
+    "placeholder": "Enter your question...",
+    "welcome": "Hello! How can I help you?"
+  }
+}
