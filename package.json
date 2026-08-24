@@ -1,0 +1,28 @@
+{
+  "name": "machine-rental-platform",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:client": "npm run dev --workspace=@machine-rental/client",
+    "build:client": "npm run build --workspace=@machine-rental/client",
+    "dev:admin": "npm run dev --workspace=@machine-rental/admin",
+    "build:admin": "npm run build --workspace=@machine-rental/admin",
+    "lint": "eslint . --max-warnings=0",
+    "typecheck": "tsc --noEmit -p apps/client/tsconfig.json && tsc --noEmit -p apps/admin/tsconfig.json",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.18.0",
+    "@types/node": "^22.10.5",
+    "eslint": "^9.18.0",
+    "prettier": "^3.4.2",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.20.0"
+  }
+}

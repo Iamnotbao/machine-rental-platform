@@ -1,0 +1,11 @@
+[data-theme='dark'] {
+  color-scheme: dark;
+  --color-primary: #65d4ae;
+  --color-primary-soft: #173f34;
+  --color-on-primary: #102019;
+  --color-text: #edf7f2;
+  --color-text-muted: #b5c7bf;
+  --color-surface: #17211d;
+  --color-surface-muted: #101713;
+  --color-border: #31433b;
+}

@@ -1,0 +1,18 @@
+.navigation {
+  display: flex;
+  gap: var(--space-4);
+}
+.navigation a {
+  color: var(--color-text-muted);
+  font-weight: 600;
+  text-decoration: none;
+}
+.navigation a[aria-current='page'] {
+  color: var(--color-primary);
+}
+@media (max-width: 34rem) {
+  .navigation {
+    gap: var(--space-3);
+    font-size: var(--font-size-sm);
+  }
+}
