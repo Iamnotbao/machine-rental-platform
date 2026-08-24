@@ -12,6 +12,7 @@
     "@machine-rental/utils": "file:../../packages/utils",
     "@tanstack/react-query": "^5.62.11",
     "i18next": "^26.4.0",
+    "lucide-react": "^1.33.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-i18next": "^17.0.12",
