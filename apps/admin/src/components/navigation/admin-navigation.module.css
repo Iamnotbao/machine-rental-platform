@@ -1,0 +1,31 @@
+.navigation {
+  display: grid;
+  gap: var(--space-xs);
+}
+.navigation a {
+  align-items: center;
+  border-radius: var(--radius-sm);
+  color: var(--color-sidebar-text);
+  display: flex;
+  gap: var(--space-sm);
+  padding: 0.68rem var(--space-md);
+  text-decoration: none;
+  transition:
+    background var(--transition-fast),
+    color var(--transition-fast),
+    transform var(--transition-fast);
+}
+.navigation a:hover {
+  background: var(--color-sidebar-hover);
+  color: var(--color-sidebar-text-active);
+  transform: translateX(2px);
+}
+.navigation .active {
+  background: var(--color-sidebar-active);
+  color: var(--color-sidebar-text-active);
+  font-weight: 700;
+}
+.navigation span:first-child {
+  font-size: 1.05rem;
+  width: 1.1rem;
+}

@@ -15,3 +15,5 @@ Backend API -> TanStack Query -> Feature Hook -> Component
 ```
 
 Components must not call APIs directly. This keeps loading, caching, error handling, and future API changes consistent. The Phase 1A API services are foundations only and are not invoked by the sample pages because no Backend exists.
+
+Admin follows the same boundary. Its API client is configured for a future `VITE_API_BASE_URL`, but all current Admin tables and dashboard figures are explicitly labelled demo data. No component calls `fetch`; future domain services will sit between feature hooks and the API client.

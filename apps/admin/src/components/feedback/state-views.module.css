@@ -1,0 +1,21 @@
+.state {
+  align-items: center;
+  border: 1px dashed var(--color-border);
+  color: var(--color-text-muted);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  justify-content: center;
+  min-height: 13rem;
+  padding: var(--space-xl);
+  text-align: center;
+}
+.state strong {
+  color: var(--color-text);
+  font-size: var(--font-size-lg);
+}
+.skeleton {
+  height: 1rem;
+  max-width: 18rem;
+  width: 70%;
+}

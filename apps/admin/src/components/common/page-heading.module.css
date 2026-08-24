@@ -1,0 +1,25 @@
+.heading {
+  align-items: flex-end;
+  display: flex;
+  gap: var(--space-lg);
+  justify-content: space-between;
+  margin-bottom: var(--space-xl);
+}
+.heading h1 {
+  letter-spacing: -0.04em;
+  margin: var(--space-xs) 0;
+}
+.heading p:not(.eyebrow) {
+  color: var(--color-text-muted);
+  margin: 0;
+}
+.heading > :last-child {
+  flex-shrink: 0;
+}
+@media (max-width: 42rem) {
+  .heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+}

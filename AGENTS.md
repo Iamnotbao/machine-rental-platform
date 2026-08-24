@@ -7,7 +7,7 @@ Read this file and the relevant `docs/` pages before modifying the project.
 The repository is an npm-workspace monorepo:
 
 - `apps/client` — customer-facing React application.
-- `apps/admin` — reserved for Phase 1B; keep isolated from Client.
+- `apps/admin` — internal operations dashboard foundation, independently buildable and isolated from Client.
 - `packages/ui` — generic reusable UI primitives only.
 - `packages/types` — types genuinely shared by multiple apps.
 - `packages/utils` — generic, domain-agnostic utilities.
@@ -30,6 +30,7 @@ Pages compose UI; features hold domain-oriented presentation; hooks coordinate s
 - Use route and status constants instead of hard-coded strings.
 - Do not create unnecessary abstractions or duplicate code.
 - Keep Client and Admin isolated. Do not modify unrelated areas.
+- Frontend role checks are UX architecture only; Backend authorization remains the security boundary.
 - When architecture, routing, business flow, or conventions change, update the matching `docs/` page in the same change.
 
 ## Git safety

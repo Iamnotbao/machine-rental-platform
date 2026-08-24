@@ -1,0 +1,36 @@
+.layout {
+  background: var(--color-background);
+  display: grid;
+  grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+  min-height: 100vh;
+}
+.content {
+  min-width: 0;
+}
+.main {
+  animation: page-enter var(--transition-base) both;
+  padding: var(--space-xl);
+}
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (max-width: 62rem) {
+  .layout {
+    display: block;
+  }
+  .main {
+    padding: var(--space-lg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .main {
+    animation: none;
+  }
+}

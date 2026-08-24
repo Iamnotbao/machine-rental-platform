@@ -8,3 +8,4 @@
 - Keep each folder within its stated responsibility. Put only generic, cross-app code in packages.
 - Normalize API errors in the API layer and render a helpful boundary, route error, empty, or loading state as appropriate.
 - TanStack Query owns server state. Keep only persistent cross-screen client state in the narrow store modules; use component state for local UI.
+- Admin navigation and role/permission checks are frontend UX architecture only and must not be treated as Backend security. Prefer explicit empty, loading, and error states for every future data view.

@@ -1,0 +1,133 @@
+.notice {
+  align-items: center;
+  background: var(--color-info-soft);
+  border: 1px solid var(--color-info-border);
+  color: var(--color-info);
+  display: flex;
+  font-size: var(--font-size-sm);
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+  padding: var(--space-sm) var(--space-md);
+}
+.kpis {
+  display: grid;
+  gap: var(--space-md);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-bottom: var(--space-lg);
+}
+.twoColumn {
+  display: grid;
+  gap: var(--space-lg);
+  grid-template-columns: 1.35fr 1fr;
+  margin-bottom: var(--space-lg);
+}
+.chartValue {
+  color: var(--color-text);
+  font-size: 1.65rem;
+  font-weight: 750;
+}
+.bars {
+  align-items: end;
+  display: flex;
+  gap: var(--space-sm);
+  height: 11rem;
+  margin-top: var(--space-lg);
+}
+.barGroup {
+  align-items: center;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-xs);
+  height: 100%;
+  justify-content: end;
+}
+.bar {
+  background: var(--color-primary);
+  border-radius: var(--radius-xs) var(--radius-xs) 0 0;
+  min-height: 0.25rem;
+  opacity: 0.85;
+  transition: height var(--transition-base);
+  width: 100%;
+}
+.barGroup span {
+  color: var(--color-text-muted);
+  font-size: 0.65rem;
+}
+.statusList {
+  display: grid;
+  gap: var(--space-md);
+}
+.statusRow {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+.statusRow > div {
+  align-items: center;
+  display: flex;
+  gap: var(--space-sm);
+}
+.dot {
+  background: var(--color-info);
+  border-radius: 50%;
+  height: 0.5rem;
+  width: 0.5rem;
+}
+.available {
+  background: var(--color-success);
+}
+.reserved {
+  background: var(--color-warning);
+}
+.rented {
+  background: var(--color-primary);
+}
+.maintenance {
+  background: var(--color-danger);
+}
+.statusTotal {
+  border-top: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  margin-top: var(--space-lg);
+  padding-top: var(--space-md);
+}
+.quickActions {
+  display: grid;
+  gap: var(--space-sm);
+  grid-template-columns: repeat(3, 1fr);
+}
+.quickActions a {
+  background: var(--color-surface-muted);
+  color: var(--color-text);
+  display: flex;
+  justify-content: space-between;
+  padding: var(--space-md);
+  text-decoration: none;
+}
+.quickActions span {
+  color: var(--color-primary);
+}
+@media (max-width: 72rem) {
+  .kpis {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 58rem) {
+  .twoColumn {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 38rem) {
+  .kpis,
+  .quickActions {
+    grid-template-columns: 1fr;
+  }
+  .bars {
+    gap: 0.2rem;
+  }
+  .barGroup span {
+    font-size: 0.55rem;
+  }
+}
