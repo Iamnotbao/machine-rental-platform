@@ -6,7 +6,7 @@ export function MainLayout() {
   return (
     <div className="app-shell">
       <Header />
-      <main className="page-container">
+      <main>
         <Outlet />
       </main>
       <Footer />

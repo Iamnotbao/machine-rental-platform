@@ -1,0 +1,121 @@
+.section {
+  background: #f3f1ea;
+}
+.layout {
+  align-items: center;
+  display: grid;
+  gap: clamp(2.5rem, 7vw, 7rem);
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 0.8fr);
+}
+.visual {
+  min-height: 26rem;
+  position: relative;
+}
+.image {
+  background: #78938b;
+  border-radius: 1.3rem;
+  inset: 0 2.3rem 0 0;
+  overflow: hidden;
+  position: absolute;
+}
+.image::before {
+  background: #a4bbb0;
+  border-radius: 50%;
+  content: '';
+  height: 25rem;
+  left: -5rem;
+  position: absolute;
+  top: -5rem;
+  width: 25rem;
+}
+.worker {
+  background: #2e4944;
+  border: 0.65rem solid #e4a243;
+  border-bottom: 0;
+  border-radius: 3rem 3rem 0.5rem 0.5rem;
+  bottom: 0;
+  height: 72%;
+  left: 31%;
+  position: absolute;
+  width: 30%;
+  z-index: 2;
+}
+.hardHat {
+  background: #e4a243;
+  border-radius: 50% 50% 0.25rem 0.25rem;
+  color: #e4a243;
+  font-size: 4.8rem;
+  height: 5.8rem;
+  left: 38%;
+  line-height: 0;
+  position: absolute;
+  top: 21%;
+  width: 8rem;
+  z-index: 3;
+}
+.crane {
+  border-left: 0.5rem solid #d8e5dc;
+  height: 75%;
+  position: absolute;
+  right: 12%;
+  top: -8%;
+  transform: rotate(16deg);
+  width: 45%;
+}
+.years {
+  align-items: center;
+  background: var(--color-primary);
+  border-radius: 0.9rem;
+  bottom: 1.5rem;
+  color: #fff;
+  display: flex;
+  gap: 0.7rem;
+  padding: 1rem 1.25rem;
+  position: absolute;
+  right: 0;
+}
+.years strong {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  letter-spacing: -0.06em;
+  line-height: 0.8;
+}
+.years span {
+  font-size: 0.7rem;
+  line-height: 1.35;
+}
+.copy h2 {
+  margin: 0.7rem 0 1rem;
+}
+.body {
+  color: var(--color-muted);
+  font-size: 0.93rem;
+  line-height: 1.75;
+  margin-top: 1.25rem;
+}
+.trust {
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  gap: 2.5rem;
+  margin-top: 1.8rem;
+  padding-top: 1.2rem;
+}
+.trust strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  letter-spacing: -0.04em;
+}
+.trust span {
+  color: var(--color-muted);
+  font-size: 0.75rem;
+}
+@media (max-width: 48rem) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+  .visual {
+    max-width: 34rem;
+    width: 100%;
+  }
+}

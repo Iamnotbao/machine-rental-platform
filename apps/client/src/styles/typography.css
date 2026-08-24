@@ -1,10 +1,15 @@
 body {
-  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-body);
   font-size: var(--font-size-base);
 }
 h1,
 h2 {
   line-height: 1.15;
+}
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
 }
 h1 {
   font-size: clamp(2rem, 5vw, 3rem);

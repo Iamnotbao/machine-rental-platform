@@ -6,8 +6,9 @@
   font-weight: 700;
   padding: 0.7rem 1rem;
   transition:
-    background 150ms ease,
-    transform 150ms ease;
+    background var(--transition-fast),
+    color var(--transition-fast),
+    transform var(--transition-fast);
 }
 .button:hover {
   transform: translateY(-1px);
@@ -15,6 +16,9 @@
 .primary {
   background: var(--color-primary);
   color: var(--color-on-primary);
+}
+.primary:hover {
+  background: var(--color-primary-strong);
 }
 .secondary {
   background: var(--color-surface-muted);
@@ -39,6 +43,61 @@
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
   padding: var(--space-5);
+}
+.container {
+  margin: 0 auto;
+  max-width: 76rem;
+  padding-inline: var(--space-4);
+  width: 100%;
+}
+.section {
+  padding-block: var(--space-xl);
+}
+.iconWrapper {
+  align-items: center;
+  background: var(--color-primary-soft);
+  border-radius: var(--radius-md);
+  color: var(--color-primary-strong);
+  display: inline-flex;
+  height: 2.75rem;
+  justify-content: center;
+  width: 2.75rem;
+}
+.heading {
+  color: var(--color-text);
+  font-family: var(--font-display);
+  line-height: 1.06;
+  margin: 0;
+}
+.headingDisplay {
+  font-size: clamp(2.8rem, 6vw, 5.75rem);
+  letter-spacing: -0.055em;
+}
+.headingSection {
+  font-size: clamp(2rem, 3.7vw, 3.5rem);
+  letter-spacing: -0.04em;
+}
+.headingCard {
+  font-family: var(--font-body);
+  font-size: 1.125rem;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+.text {
+  color: var(--color-muted);
+  line-height: 1.7;
+  margin: 0;
+}
+.textLead {
+  font-size: clamp(1rem, 1.5vw, 1.2rem);
+}
+@media (prefers-reduced-motion: reduce) {
+  .button {
+    transition: none;
+  }
+  .button:hover {
+    transform: none;
+  }
 }
 .badge {
   background: var(--color-primary-soft);

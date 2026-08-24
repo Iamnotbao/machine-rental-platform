@@ -1,0 +1,179 @@
+.intro {
+  align-items: end;
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: 1fr minmax(16rem, 0.8fr);
+  margin-bottom: 2.5rem;
+}
+.intro h2 {
+  margin-top: 0.65rem;
+  max-width: 35rem;
+}
+.grid {
+  display: grid;
+  gap: 1.3rem;
+  grid-template-columns: repeat(3, 1fr);
+}
+.card {
+  overflow: hidden;
+  padding: 0;
+  transition:
+    box-shadow var(--transition-fast),
+    transform var(--transition-fast);
+}
+.card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-0.4rem);
+}
+.machineImage {
+  background: #d9e4de;
+  height: 13.5rem;
+  overflow: hidden;
+  position: relative;
+  transition: transform 400ms var(--transition-normal);
+}
+.card:hover .machineImage {
+  transform: scale(1.04);
+}
+.machineImage::after {
+  background: rgb(255 255 255 / 23%);
+  border-radius: 50%;
+  content: '';
+  height: 15rem;
+  position: absolute;
+  right: -3rem;
+  top: -5rem;
+  width: 15rem;
+}
+.blue {
+  background: #d7e5e9;
+}
+.green {
+  background: #dce5cf;
+}
+.cloud {
+  background: rgb(255 255 255 / 65%);
+  border-radius: 1rem;
+  height: 1rem;
+  left: 16%;
+  position: absolute;
+  top: 22%;
+  width: 3.2rem;
+}
+.machineBody {
+  background: var(--color-primary);
+  border-radius: 0.4rem 0.7rem 0.3rem 0.3rem;
+  bottom: 23%;
+  height: 24%;
+  left: 29%;
+  position: absolute;
+  width: 42%;
+  z-index: 1;
+}
+.blue .machineBody {
+  background: #31758a;
+}
+.green .machineBody {
+  background: #708e48;
+}
+.machineCab {
+  background: #31484a;
+  border: 0.38rem solid var(--color-primary);
+  border-bottom: 0;
+  border-radius: 0.6rem 0.6rem 0 0;
+  bottom: 47%;
+  height: 28%;
+  left: 52%;
+  position: absolute;
+  width: 18%;
+  z-index: 2;
+}
+.blue .machineCab {
+  border-color: #31758a;
+}
+.green .machineCab {
+  border-color: #708e48;
+}
+.machineWheelOne,
+.machineWheelTwo {
+  background: #1f302c;
+  border: 0.3rem solid #87928d;
+  border-radius: 50%;
+  bottom: 14%;
+  height: 2.5rem;
+  position: absolute;
+  width: 2.5rem;
+  z-index: 2;
+}
+.machineWheelOne {
+  left: 30%;
+}
+.machineWheelTwo {
+  left: 60%;
+}
+.machineArm {
+  background: var(--color-primary);
+  bottom: 45%;
+  height: 0.85rem;
+  left: 5%;
+  position: absolute;
+  transform: rotate(-26deg);
+  width: 34%;
+}
+.blue .machineArm {
+  background: #31758a;
+}
+.green .machineArm {
+  background: #708e48;
+}
+.cardContent {
+  padding: 1.3rem;
+}
+.cardContent h3 {
+  font-family: var(--font-display);
+  font-size: 1.55rem;
+  letter-spacing: -0.035em;
+  margin: 0.8rem 0 0.55rem;
+}
+.cardContent p {
+  color: var(--color-muted);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  min-height: 3rem;
+}
+.cardFooter {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1.3rem;
+}
+.cardFooter strong {
+  font-size: 0.84rem;
+}
+.cardFooter button {
+  padding: 0.45rem 0;
+}
+.cardFooter button span {
+  color: var(--color-primary);
+  font-size: 1.15rem;
+  margin-left: 0.25rem;
+}
+@media (max-width: 52rem) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .grid > :last-child {
+    grid-column: span 2;
+  }
+  .intro {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 35rem) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+  .grid > :last-child {
+    grid-column: auto;
+  }
+}

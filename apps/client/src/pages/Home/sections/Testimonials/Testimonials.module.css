@@ -1,0 +1,78 @@
+.heading {
+  margin-bottom: 2.5rem;
+  text-align: center;
+}
+.heading h2 {
+  margin-top: 0.65rem;
+}
+.heading > p:last-child {
+  margin: 1rem auto 0;
+  max-width: 34rem;
+}
+.grid {
+  display: grid;
+  gap: 1.2rem;
+  grid-template-columns: repeat(3, 1fr);
+}
+.card {
+  box-shadow: none;
+  min-height: 15rem;
+  padding: 1.5rem;
+}
+.quote {
+  color: var(--color-primary);
+  font-family: var(--font-display);
+  font-size: 3rem;
+  line-height: 0.65;
+}
+.comment {
+  font-size: 0.93rem;
+  line-height: 1.7;
+  margin-top: 1rem;
+}
+.person {
+  align-items: center;
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  gap: 0.65rem;
+  margin-top: 1.4rem;
+  padding-top: 1rem;
+}
+.initial {
+  align-items: center;
+  background: #dbe7e1;
+  border-radius: 50%;
+  color: var(--color-secondary);
+  display: flex;
+  font-size: 0.75rem;
+  font-weight: 800;
+  height: 2rem;
+  justify-content: center;
+  width: 2rem;
+}
+.person p {
+  line-height: 1.2;
+}
+.person strong {
+  display: block;
+  font-size: 0.76rem;
+}
+.person small {
+  color: var(--color-muted);
+  display: block;
+  font-size: 0.64rem;
+  margin-top: 0.2rem;
+}
+.stars {
+  color: #eaa337;
+  font-size: 0.58rem;
+  margin-left: auto;
+}
+@media (max-width: 48rem) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+  .card {
+    min-height: 0;
+  }
+}

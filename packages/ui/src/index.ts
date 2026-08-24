@@ -1,7 +1,12 @@
 export { Badge } from './Badge';
 export { Button } from './Button';
 export { Card } from './Card';
+export { Container } from './Container';
+export { Heading } from './Heading';
+export { IconWrapper } from './IconWrapper';
 export { Input } from './Input';
 export { Modal } from './Modal';
 export { Skeleton } from './Skeleton';
 export { Spinner } from './Spinner';
+export { Section } from './Section';
+export { Text } from './Text';
