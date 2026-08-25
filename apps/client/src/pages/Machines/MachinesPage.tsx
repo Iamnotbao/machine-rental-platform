@@ -12,27 +12,24 @@ export default function MachinesPage() {
   const [priceSort, setPriceSort] = useState('default');
 
   const filtered = useMemo(() => {
-    let result = providerId
-      ? machineConfigs.filter((machine) => {
-          const value = String(
-            machine.providerId ?? machine.provider ?? machine.providerSlug ?? '',
-          ).toLowerCase();
-          return value === providerId.toLowerCase();
-        })
-      : [...machineConfigs];
+    const result = [...machineConfigs];
 
-    if (ram !== 'all') result = result.filter((x) => x.specs.ram === ram);
-    if (cpu !== 'all') result = result.filter((x) => x.specs.cpu === cpu);
+    if (ram !== 'all') {
+      result.splice(0, result.length, ...result.filter((machine) => machine.specs.ram === ram));
+    }
+    if (cpu !== 'all') {
+      result.splice(0, result.length, ...result.filter((machine) => machine.specs.cpu === cpu));
+    }
 
     if (priceSort === 'asc') result.sort((a, b) => a.pricing.week - b.pricing.week);
     if (priceSort === 'desc') result.sort((a, b) => b.pricing.week - a.pricing.week);
 
     return result;
-  }, [providerId, ram, cpu, priceSort]);
+  }, [ram, cpu, priceSort]);
 
   return (
     <>
-      <h1>Danh sách cấu hình máy chủ</h1>
+      <h1>{providerId ? `Cấu hình máy chủ — ${providerId}` : 'Danh sách cấu hình máy chủ'}</h1>
       <MachineFilter
         ram={ram}
         cpu={cpu}
