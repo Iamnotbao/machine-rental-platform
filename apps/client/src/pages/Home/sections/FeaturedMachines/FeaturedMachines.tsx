@@ -1,23 +1,33 @@
 import { Container, Heading, Section, Text } from '@machine-rental/ui';
 import { Link } from 'react-router-dom';
 import { Reveal } from '@/components/motion/Reveal';
-import { machineConfigs } from '@/features/machines/data/machine-config.mock';
 import styles from './FeaturedMachines.module.css';
 
-export function FeaturedMachines() {
-  const providers = Array.from(
-    new Map(
-      machineConfigs.map((machine) => [
-        machine.providerId,
-        {
-          id: machine.providerId,
-          name: machine.providerName,
-          description: machine.providerDescription,
-        },
-      ]),
-    ).values(),
-  );
+type Provider = {
+  id: string;
+  name: string;
+  description: string;
+};
 
+const providers: Provider[] = [
+  {
+    id: 'provider-a',
+    name: 'Provider A',
+    description: 'Máy chủ vật lý hiệu năng cao cho các hệ thống cần sự ổn định.',
+  },
+  {
+    id: 'provider-b',
+    name: 'Provider B',
+    description: 'Cấu hình linh hoạt cho website, ứng dụng và nền tảng doanh nghiệp.',
+  },
+  {
+    id: 'provider-c',
+    name: 'Provider C',
+    description: 'Giải pháp máy chủ đa dạng với mức giá phù hợp nhiều nhu cầu.',
+  },
+];
+
+export function FeaturedMachines() {
   return (
     <Section className={styles.section}>
       <Container>
