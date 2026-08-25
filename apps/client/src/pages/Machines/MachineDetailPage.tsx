@@ -1,87 +1,43 @@
-import { useEffect,useState } from "react";
+import { useParams } from 'react-router-dom';
 
-import { useParams } from "react-router-dom";
+import { machineConfigs } from '@/features/machines/data/machine-config.mock';
+import { machineInstances } from '@/features/machines/data/machine-instance.mock';
+import { MachineInstanceCard } from '@/features/machines/components/MachineInstanceCard/MachineInstanceCard';
 
+export default function MachineDetailPage() {
+  const { id } = useParams();
 
-import { machineService } from "@/features/machines/services/machineService";
+  const config = machineConfigs.find(item => item.id === id);
 
+  if (!config) {
+    return <div>Không tìm thấy cấu hình</div>;
+  }
 
-import type { Machine } from "@/features/machines/components/types";
+  const servers = machineInstances.filter(
+    item => item.configId === config.id && item.status === 'available'
+  );
 
+  return (
+    <section>
+      <h1>{config.name}</h1>
+      <p>{config.description}</p>
 
-import { MachineGallery } from "@/features/machines/components/MachineGallery/MachineGallery";
+      <h2>Thông số</h2>
+      <p>CPU: {config.specs.cpu}</p>
+      <p>RAM: {config.specs.ram}</p>
+      <p>GPU: {config.specs.gpu}</p>
+      <p>SSD: {config.specs.storage}</p>
 
-import { MachinePricing } from "@/features/machines/components/MachinePricingCard/MachinePricingCard";
+      <h2>Máy đang khả dụng ({servers.length})</h2>
 
-
-
-export function MachineDetailPage(){
-
-
-const {id}=useParams();
-
-
-const [machine,setMachine]=useState<Machine>();
-
-
-
-useEffect(()=>{
-
-if(id){
-
-machineService
-.getMachineById(id)
-.then(setMachine);
-
-}
-
-},[id]);
-
-
-
-if(!machine)
-return <p>Loading...</p>;
-
-
-
-return (
-
-<section>
-
-
-<h1>
-{machine.name}
-</h1>
-
-
-<MachineGallery
-
-images={machine.images}
-
-/>
-
-
-<p>
-{machine.description}
-</p>
-
-
-<MachinePricing
-
-pricing={machine.pricing}
-
-/>
-
-
-<button>
-
-Thuê ngay
-
-</button>
-
-
-</section>
-
-)
-
+      <div>
+        {servers.map(server => (
+          <MachineInstanceCard
+            key={server.id}
+            machine={server}
+          />
+        ))}
+      </div>
+    </section>
+  );
 }

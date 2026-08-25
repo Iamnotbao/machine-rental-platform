@@ -1,4 +1,4 @@
-import { machines } from "../data/machine.mock";
+import { machines } from "../data/machine-config.mock";
 
 import type { Machine } from "../types";
 

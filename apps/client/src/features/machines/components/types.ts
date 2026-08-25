@@ -1,43 +1,66 @@
-export interface Machine {
+export interface MachineConfig {
 
-  id: string;
+  id:string;
 
-  name: string;
+  name:string;
 
-  category: string;
+  category:string;
 
-  description: string;
+  description:string;
 
 
-  images: string[];
+  images:string[];
+
+
+  specs:{
+
+    cpu:string;
+
+    ram:string;
+
+    gpu:string;
+
+    storage:string;
+
+  };
+
+
+  pricing:{
+
+    test24h:number;
+
+    week:number;
+
+    month:number;
+
+  };
+
+
+  availableCount:number;
+
+}
+
+
+
+
+export interface MachineInstance {
+
+
+  id:string;
+
+
+  configId:string;
+
+
+  name:string;
 
 
   status:
-    | "available"
-    | "rented";
+  | "available"
+  | "rented";
 
 
-  specs: {
+  location:string;
 
-    cpu: string;
-
-    ram: string;
-
-    gpu: string;
-
-    storage: string;
-
-  };
-
-
-  pricing: {
-
-    test24h: number;
-
-    week: number;
-
-    month: number;
-
-  };
 
 }

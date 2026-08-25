@@ -1,67 +1,40 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { MachineFilter } from '@/features/machines/components/MachineFilter/MachineFilter';
-
 import { MachineCarousel } from '@/features/machines/components/MachineCarousel/MachineCarousel';
+import { machineConfigs } from '@/features/machines/data/machine-config.mock';
 
-import { machines } from '@/features/machines/data/machine.mock';
-
-export function MachinesPage() {
-  const [category, setCategory] = useState('all');
-
+export default function MachinesPage() {
   const [ram, setRam] = useState('all');
-
   const [cpu, setCpu] = useState('all');
+  const [priceSort, setPriceSort] = useState('default');
 
-  const [price, setPrice] = useState('all');
+  const filtered = useMemo(() => {
+    let result = [...machineConfigs];
 
-  const filteredMachines = machines.filter((machine) => {
-    if (category !== 'all' && machine.category !== category) {
-      return false;
-    }
+    if (ram !== 'all') result = result.filter(x => x.specs.ram === ram);
+    if (cpu !== 'all') result = result.filter(x => x.specs.cpu === cpu);
 
-    if (ram !== 'all' && machine.specs.ram !== ram) {
-      return false;
-    }
+    if (priceSort === 'asc') result.sort((a,b)=>a.pricing.week-b.pricing.week);
+    if (priceSort === 'desc') result.sort((a,b)=>b.pricing.week-a.pricing.week);
 
-    if (cpu !== 'all' && machine.specs.cpu !== cpu) {
-      return false;
-    }
-
-    if (price === 'low' && machine.pricing.week >= 500000) {
-      return false;
-    }
-
-    if (price === 'high' && machine.pricing.week < 500000) {
-      return false;
-    }
-
-    return true;
-  });
+    return result;
+  }, [ram,cpu,priceSort]);
 
   return (
     <section>
-      <h1>Danh sách máy chủ</h1>
+      <h1>Danh sách cấu hình máy chủ</h1>
 
       <MachineFilter
-        category={category}
-
-        setCategory={setCategory}
-
         ram={ram}
-
         setRam={setRam}
-
         cpu={cpu}
-
         setCpu={setCpu}
-
-        price={price}
-
-        setPrice={setPrice}
+        priceSort={priceSort}
+        setPriceSort={setPriceSort}
       />
 
-      <MachineCarousel machines={filteredMachines} />
+      <MachineCarousel machines={filtered}/>
     </section>
   );
 }

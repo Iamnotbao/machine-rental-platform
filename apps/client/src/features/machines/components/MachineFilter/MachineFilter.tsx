@@ -3,10 +3,6 @@ import styles from './MachineFilter.module.css';
 
 interface Props {
 
-  category:string;
-
-  setCategory:(value:string)=>void;
-
 
   ram:string;
 
@@ -18,19 +14,16 @@ interface Props {
   setCpu:(value:string)=>void;
 
 
-  price:string;
+  priceSort:string;
 
-  setPrice:(value:string)=>void;
+  setPriceSort:(value:string)=>void;
+
 
 }
 
 
 
 export function MachineFilter({
-
-  category,
-
-  setCategory,
 
   ram,
 
@@ -40,11 +33,12 @@ export function MachineFilter({
 
   setCpu,
 
-  price,
+  priceSort,
 
-  setPrice,
+  setPriceSort,
 
 }:Props){
+
 
 
 return (
@@ -52,174 +46,181 @@ return (
 <div className={styles.filter}>
 
 
-  <div className={styles.group}>
+<div className={styles.group}>
 
-    <label>
-      Loại máy
-    </label>
 
+<label>
 
-    <select
+RAM
 
-      value={category}
+</label>
 
-      onChange={(e)=>
-        setCategory(e.target.value)
-      }
 
-    >
 
-      <option value="all">
-        Tất cả
-      </option>
+<select
 
+value={ram}
 
-      <option value="Máy chủ vật lý">
-        Máy chủ vật lý
-      </option>
+onChange={(e)=>
+setRam(e.target.value)
+}
 
+>
 
-    </select>
 
+<option value="all">
 
-  </div>
+Tất cả
 
+</option>
 
 
 
+<option value="64GB">
 
-  <div className={styles.group}>
+64GB
 
+</option>
 
-    <label>
-      RAM
-    </label>
 
 
-    <select
+<option value="128GB">
 
-      value={ram}
+128GB
 
-      onChange={(e)=>
-        setRam(e.target.value)
-      }
+</option>
 
-    >
 
-      <option value="all">
-        Tất cả
-      </option>
 
+</select>
 
-      <option value="64GB">
-        64GB
-      </option>
 
+</div>
 
-      <option value="128GB">
-        128GB
-      </option>
 
 
-    </select>
 
 
-  </div>
 
+<div className={styles.group}>
 
 
+<label>
 
+CPU
 
-  <div className={styles.group}>
+</label>
 
 
-    <label>
-      CPU
-    </label>
 
+<select
 
-    <select
+value={cpu}
 
-      value={cpu}
+onChange={(e)=>
+setCpu(e.target.value)
+}
 
-      onChange={(e)=>
-        setCpu(e.target.value)
-      }
+>
 
-    >
 
+<option value="all">
 
-      <option value="all">
-        Tất cả
-      </option>
+Tất cả
 
+</option>
 
-      <option value="12 Core 24 Thread">
-        12 Core 24 Thread
-      </option>
 
 
-      <option value="28 Core 56 Thread">
-        28 Core 56 Thread
-      </option>
+<option value="12 Core 24 Thread">
 
+12 Core 24 Thread
 
-      <option value="36 Core 72 Thread">
-        36 Core 72 Thread
-      </option>
+</option>
 
 
-    </select>
 
+<option value="28 Core 56 Thread">
 
-  </div>
+28 Core 56 Thread
 
+</option>
 
 
 
+<option value="36 Core 72 Thread">
 
-  <div className={styles.group}>
+36 Core 72 Thread
 
+</option>
 
-    <label>
-      Giá 7 ngày
-    </label>
 
 
-    <select
+</select>
 
-      value={price}
 
-      onChange={(e)=>
-        setPrice(e.target.value)
-      }
+</div>
 
-    >
 
 
-      <option value="all">
-        Tất cả
-      </option>
 
 
-      <option value="low">
-        Dưới 500.000đ
-      </option>
 
+<div className={styles.group}>
 
-      <option value="high">
-        Trên 500.000đ
-      </option>
 
+<label>
 
-    </select>
+Sắp xếp giá
 
+</label>
 
-  </div>
+
+
+<select
+
+value={priceSort}
+
+onChange={(e)=>
+setPriceSort(e.target.value)
+}
+
+>
+
+
+<option value="default">
+
+Mặc định
+
+</option>
+
+
+
+<option value="asc">
+
+Giá thấp → cao
+
+</option>
+
+
+
+<option value="desc">
+
+Giá cao → thấp
+
+</option>
+
+
+
+</select>
+
+
+</div>
 
 
 
 </div>
+
 
 );
 

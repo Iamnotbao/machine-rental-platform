@@ -9,7 +9,7 @@ import { LoginPage, RegisterPage } from '@/pages/Auth';
 import { BookingPage, CartPage, CheckoutPage } from '@/pages/Booking';
 import { ErrorPage } from '@/pages/Error';
 import { HomePage } from '@/pages/Home';
-import {  MachinesPage } from '@/pages/Machines';
+import { MachinesPage, MachineDetailPage } from '@/pages/Machines';
 import { NotFoundPage } from '@/pages/NotFound';
 
 export const router = createBrowserRouter([
@@ -20,7 +20,7 @@ export const router = createBrowserRouter([
     children: [
       { index: true, element: <HomePage /> },
       { path: ROUTES.machines, element: <MachinesPage /> },
-    //  { path: ROUTES.machineDetail, element: <MachineDetailPage /> },
+    { path: ROUTES.machineDetail, element: <MachineDetailPage /> },
       { path: ROUTES.machineBooking, element: <BookingPage /> },
       {
         element: <ProtectedRoute />,
