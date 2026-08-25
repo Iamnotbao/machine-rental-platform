@@ -1,10 +1,23 @@
 import { Container, Heading, Section, Text } from '@machine-rental/ui';
+import { Link } from 'react-router-dom';
 import { Reveal } from '@/components/motion/Reveal';
-import { providers } from '@/features/providers/data/provider.mock';
-import { ProviderCard } from '@/features/providers/components/ProviderCard/ProviderCard';
+import { machineConfigs } from '@/features/machines/data/machine-config.mock';
 import styles from './FeaturedMachines.module.css';
 
 export function FeaturedMachines() {
+  const providers = Array.from(
+    new Map(
+      machineConfigs.map((machine) => [
+        machine.providerId,
+        {
+          id: machine.providerId,
+          name: machine.providerName,
+          description: machine.providerDescription,
+        },
+      ]),
+    ).values(),
+  );
+
   return (
     <Section className={styles.section}>
       <Container>
@@ -18,7 +31,10 @@ export function FeaturedMachines() {
         <div className={styles.grid}>
           {providers.map((provider, index) => (
             <Reveal key={provider.id} delay={index * 0.08}>
-              <ProviderCard provider={provider} />
+              <Link to={`/machine/${provider.id}`} className={styles.card}>
+                <h3>{provider.name}</h3>
+                <p>{provider.description}</p>
+              </Link>
             </Reveal>
           ))}
         </div>
