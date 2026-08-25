@@ -1,18 +1,21 @@
 import { Container, Heading, Section, Text } from '@machine-rental/ui';
+import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Reveal } from '@/components/motion/Reveal';
 import { machineConfigs } from '@/features/machines/data/machine-config.mock';
 import styles from './FeaturedMachines.module.css';
 
-type Provider = { id: string; name: string; description: string; location: string; configs: number; machines: number; averagePrice: number };
-
-const providers: Provider[] = ['provider-a', 'provider-b', 'provider-c'].map((id, index) => {
-  const configs = machineConfigs.filter((machine) => machine.providerId === id);
-  return { id, name: `Provider ${String.fromCharCode(65 + index)}`, description: 'Hạ tầng máy chủ vật lý ổn định, sẵn sàng cho website và ứng dụng.', location: configs[0]?.location ?? 'Việt Nam', configs: configs.length, machines: configs.reduce((sum, machine) => sum + machine.availableCount, 0), averagePrice: configs.length ? Math.round(configs.reduce((sum, machine) => sum + machine.pricing.month, 0) / configs.length) : 0 };
-});
-
+type Provider = { id: string; name: string; description: string; location: string; configs: number; machines: number; averagePrice: number; image: string };
 const money = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND', maximumFractionDigits: 0 });
 
 export function FeaturedMachines() {
-  return <Section className={styles.section}><Container><Reveal><Text className={styles.eyebrow}>NHÀ CUNG CẤP NỔI BẬT</Text><Heading className={styles.title}>Thuê máy chủ vật lý hiệu năng cao</Heading><Text className={styles.description}>Chọn vị trí, cấu hình và mức giá phù hợp cho hệ thống của bạn.</Text></Reveal><div className={styles.grid}>{providers.map((provider,index)=><Reveal key={provider.id} delay={index*.08}><Link to={`/machine/${provider.id}`} className={styles.card}><span className={styles.cardLabel}>SERVER PROVIDER</span><h3>{provider.name}</h3><p>{provider.description}</p><div className={styles.meta}><span>Vị trí<strong>{provider.location}</strong></span><span>Cấu hình<strong>{provider.configs}</strong></span><span>Máy sẵn<strong>{provider.machines}</strong></span><span>TB từ<strong>{money.format(provider.averagePrice)}</strong></span></div></Link></Reveal>)}</div></Container></Section>;
+  const [query, setQuery] = useState('');
+  const [page, setPage] = useState(1);
+  const providers = useMemo(() => ['provider-a', 'provider-b', 'provider-c'].map((id, index) => { const configs = machineConfigs.filter((machine) => machine.providerId === id); return { id, name: `Provider ${String.fromCharCode(65 + index)}`, description: 'Hạ tầng máy chủ vật lý ổn định, sẵn sàng cho website và ứng dụng.', location: configs[0]?.location ?? 'Việt Nam', configs: configs.length, machines: configs.reduce((sum, machine) => sum + machine.availableCount, 0), averagePrice: configs.length ? Math.round(configs.reduce((sum, machine) => sum + machine.pricing.month, 0) / configs.length) : 0, image: configs[0]?.images[0] ?? '/images/machines/server-1.jpg' }; }), []);
+  const filtered = providers.filter((provider) => `${provider.name} ${provider.location} ${provider.description}`.toLowerCase().includes(query.toLowerCase()));
+  const pageSize = 3;
+  const pageCount = Math.max(1, Math.ceil(filtered.length / pageSize));
+  const visible = filtered.slice((page - 1) * pageSize, page * pageSize);
+
+  return <Section className={styles.section}><Container><Reveal><Text className={styles.eyebrow}>NHÀ CUNG CẤP NỔI BẬT</Text><Heading className={styles.title}>Thuê máy chủ vật lý hiệu năng cao</Heading><Text className={styles.description}>Chọn vị trí, cấu hình và mức giá phù hợp cho hệ thống của bạn.</Text><input className={styles.search} value={query} onChange={(event) => { setQuery(event.target.value); setPage(1); }} placeholder="Tìm provider hoặc vị trí..." /></Reveal><div className={styles.grid}>{visible.map((provider,index)=><Reveal key={provider.id} delay={index*.08}><Link to={`/machine/${provider.id}`} className={styles.card}><img className={styles.image} src={provider.image} alt={provider.name} /><div className={styles.body}><span className={styles.cardLabel}>SERVER PROVIDER</span><h3>{provider.name}</h3><p>{provider.description}</p><div className={styles.meta}><span><small>Vị trí</small><strong>{provider.location}</strong></span><span><small>Cấu hình</small><strong>{provider.configs}</strong></span><span><small>Máy sẵn</small><strong>{provider.machines}</strong></span><span><small>TB từ</small><strong>{money.format(provider.averagePrice)}</strong></span></div></div></Link></Reveal>)}</div>{!visible.length && <p className={styles.empty}>Không tìm thấy provider phù hợp.</p>}<div className={styles.pagination}>{Array.from({length: pageCount}, (_, index) => index + 1).map((number) => <button type="button" key={number} className={number === page ? styles.activePage : ''} onClick={() => setPage(number)}>{number}</button>)}</div></Container></Section>;
 }
