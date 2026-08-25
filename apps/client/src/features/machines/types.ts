@@ -5,6 +5,9 @@ export interface MachineConfig {
   category: string;
   description: string;
   images: string[];
+  location: string;
+  os: string;
+  bandwidth: string;
   specs: { cpu: string; ram: string; gpu: string; storage: string };
   pricing: { test24h: number; week: number; month: number };
   availableCount: number;
