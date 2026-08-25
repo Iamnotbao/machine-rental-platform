@@ -20,7 +20,9 @@ export const router = createBrowserRouter([
     children: [
       { index: true, element: <HomePage /> },
       { path: ROUTES.machines, element: <MachinesPage /> },
-    { path: ROUTES.machineDetail, element: <MachineDetailPage /> },
+      { path: '/machine/:providerId', element: <MachinesPage /> },
+      { path: '/machines/:providerId', element: <MachinesPage /> },
+      { path: '/machines/config/:id', element: <MachineDetailPage /> },
       { path: ROUTES.machineBooking, element: <BookingPage /> },
       {
         element: <ProtectedRoute />,
@@ -35,10 +37,10 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    element: <PublicRoute />,
+    element: <AuthLayout />,
     children: [
       {
-        element: <AuthLayout />,
+        element: <PublicRoute />,
         children: [
           { path: ROUTES.login, element: <LoginPage /> },
           { path: ROUTES.register, element: <RegisterPage /> },
