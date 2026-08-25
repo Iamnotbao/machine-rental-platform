@@ -23,6 +23,8 @@ export const router = createBrowserRouter([
       { path: '/machine/:providerId', element: <MachinesPage /> },
       { path: '/machines/:providerId', element: <MachinesPage /> },
       { path: '/machines/config/:id', element: <MachineDetailPage /> },
+      { path: '/machines/:id', element: <MachineDetailPage /> },
+      { path: '/machine/:id', element: <MachineDetailPage /> },
       { path: ROUTES.machineBooking, element: <BookingPage /> },
       {
         element: <ProtectedRoute />,

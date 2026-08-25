@@ -5,13 +5,13 @@ import { MachineInstanceCard } from '@/features/machines/components/MachineInsta
 import styles from './page.module.css';
 
 export default function MachineDetailPage() {
-  const { id } = useParams();
-  const config = machineConfigs.find((x) => x.id === id);
+  const { id } = useParams<{ id: string }>();
+  const config = machineConfigs.find((item) => item.id === id || item.slug === id);
 
   if (!config) return <p>Không tìm thấy cấu hình máy.</p>;
 
   const instances = machineInstances.filter(
-    (instance) => instance.configId === id && instance.status === 'available',
+    (instance) => instance.configId === config.id && instance.status === 'available',
   );
 
   return (
