@@ -1,0 +1,105 @@
+.card {
+
+padding:24px;
+
+border-radius:24px;
+
+background:white;
+
+
+border:1px solid #e5e7eb;
+
+
+box-shadow:
+
+0 15px 35px rgba(0,0,0,.08);
+
+
+}
+
+
+
+.card h3 {
+
+font-size:22px;
+
+margin-bottom:20px;
+
+}
+
+
+
+.priceItem {
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+
+padding:14px 0;
+
+
+border-bottom:
+
+1px solid #f1f5f9;
+
+}
+
+
+
+.priceItem span {
+
+color:#64748b;
+
+}
+
+
+
+.priceItem strong {
+
+font-size:18px;
+
+}
+
+
+
+.button {
+
+margin-top:20px;
+
+width:100%;
+
+padding:14px;
+
+
+border-radius:14px;
+
+
+border:none;
+
+
+background:#2563eb;
+
+
+color:white;
+
+
+font-weight:600;
+
+
+cursor:pointer;
+
+
+transition:.25s ease;
+
+}
+
+
+
+.button:hover {
+
+transform:translateY(-3px);
+
+}

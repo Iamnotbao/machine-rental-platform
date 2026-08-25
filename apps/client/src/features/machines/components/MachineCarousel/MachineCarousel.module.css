@@ -1,0 +1,118 @@
+.carousel {
+  width:100%;
+}
+
+
+.content {
+
+display:flex;
+
+align-items:center;
+
+gap:16px;
+
+}
+
+
+
+.container {
+
+display:flex;
+
+gap:24px;
+
+overflow-x:auto;
+
+scroll-behavior:smooth;
+
+scroll-snap-type:x mandatory;
+
+flex:1;
+
+
+scrollbar-width:none;
+
+}
+
+
+
+.container::-webkit-scrollbar{
+
+display:none;
+
+}
+
+
+
+.item {
+
+min-width:320px;
+
+scroll-snap-align:start;
+
+}
+
+
+
+.arrow {
+
+width:44px;
+
+height:44px;
+
+border-radius:50%;
+
+border:none;
+
+background:white;
+
+cursor:pointer;
+
+font-size:28px;
+
+box-shadow:
+0 5px 15px rgba(0,0,0,.15);
+
+}
+
+
+
+.pagination {
+
+display:flex;
+
+justify-content:center;
+
+gap:10px;
+
+margin-top:24px;
+
+}
+
+
+
+.pagination button {
+
+width:36px;
+
+height:36px;
+
+border-radius:50%;
+
+border:1px solid #ddd;
+
+background:white;
+
+cursor:pointer;
+
+}
+
+
+
+.pagination .activePage {
+
+background:#f97316;
+
+color:white;
+
+}

@@ -1,6 +1,43 @@
-.grid {
-  display: grid;
-  gap: var(--space-5);
-  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
-  margin-top: var(--space-5);
+.detail {
+  display:flex;
+  flex-direction:column;
+  gap:24px;
+}
+
+
+.specGrid {
+
+display:grid;
+
+grid-template-columns:
+repeat(2,1fr);
+
+gap:16px;
+
+}
+
+
+.specGrid p {
+
+display:flex;
+
+justify-content:space-between;
+
+padding:12px;
+
+border:1px solid #eee;
+
+border-radius:12px;
+
+}
+
+
+@media(max-width:768px){
+
+.specGrid{
+
+grid-template-columns:1fr;
+
+}
+
 }
