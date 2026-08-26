@@ -12,3 +12,13 @@ export interface MachineConfig {
   pricing: { test24h: number; week: number; month: number };
   availableCount: number;
 }
+
+export type MachineInstanceStatus = 'available' | 'rented';
+
+export interface MachineInstance {
+  id: string;
+  configId: string;
+  name: string;
+  status: MachineInstanceStatus;
+  location: string;
+}
