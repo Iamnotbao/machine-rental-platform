@@ -6,7 +6,7 @@ import styles from './page.module.css';
 
 export default function MachineDetailPage() {
   const { id } = useParams<{ id: string }>();
-  const config = machineConfigs.find((item) => item.id === id || item.slug === id);
+  const config = machineConfigs.find((item) => item.id === id);
 
   if (!config) return <p>Không tìm thấy cấu hình máy.</p>;
 
@@ -21,7 +21,7 @@ export default function MachineDetailPage() {
       <section>
         {instances.length ? (
           instances.map((instance) => (
-            <MachineInstanceCard key={instance.id} instance={instance} />
+            <MachineInstanceCard key={instance.id} machine={instance} />
           ))
         ) : (
           <p>Hiện chưa có máy available cho cấu hình này.</p>
