@@ -1,18 +1,20 @@
-import { createBrowserRouter } from 'react-router-dom';
-import { App } from '@/app/App';
-import { AuthPage } from '@/pages/Auth';
-import { MachinesPage } from '@/pages/Machines/MachinesPage';
-import { MachineDetailPage } from '@/pages/Machines/MachineDetailPage';
-import { CheckoutPage } from '@/pages/Checkout';
-import { OrderSuccessPage } from '@/pages/OrderSuccess';
+import HomePage from '@/pages/Home';
+import AuthPage from '@/pages/Auth';
+import MachinesPage, { MachineDetailPage } from '@/pages/Machines';
+import BookingPage from '@/pages/Booking';
+import CheckoutPage from '@/pages/Checkout';
+import OrderSuccessPage from '@/pages/OrderSuccess';
+import AccountPage from '@/pages/Account';
+import NotFoundPage from '@/pages/NotFound';
 
-export const router = createBrowserRouter([
-  { path: '/', element: <App /> },
+export const routes = [
+  { path: '/', element: <HomePage /> },
   { path: '/auth', element: <AuthPage /> },
-  { path: '/login', element: <AuthPage /> },
   { path: '/machines', element: <MachinesPage /> },
   { path: '/machines/:id', element: <MachineDetailPage /> },
-  { path: '/booking', element: <CheckoutPage /> },
+  { path: '/booking', element: <BookingPage /> },
   { path: '/checkout', element: <CheckoutPage /> },
   { path: '/order-success', element: <OrderSuccessPage /> },
-]);
+  { path: '/account', element: <AccountPage /> },
+  { path: '*', element: <NotFoundPage /> },
+];
