@@ -1,33 +1,22 @@
-import { Link, useParams } from 'react-router-dom';
-import { Button, Card } from '@machine-rental/ui';
-import { ROUTES } from '@/constants/route.constants';
+import { useMemo, useState } from 'react';
+
 export function BookingPage() {
-  const { id } = useParams();
+  const [days, setDays] = useState(1);
+  const [quantity, setQuantity] = useState(1);
+  const total = useMemo(() => days * quantity, [days, quantity]);
+
   return (
-    <section>
-      <h1>Book {id?.replaceAll('-', ' ')}</h1>
-      <Card>
-        <p>Availability and booking validation will be connected when the backend is available.</p>
-        <Link to={ROUTES.cart}>
-          <Button>Continue to cart</Button>
-        </Link>
-      </Card>
-    </section>
+    <main style={{ minHeight: '100vh', padding: '48px', background: '#f8fafc' }}>
+      <section style={{ maxWidth: 720, margin: '0 auto', padding: 32, borderRadius: 20, background: '#fff', boxShadow: '0 20px 60px rgba(15,23,42,.12)' }}>
+        <p style={{ color: '#0284c7', fontWeight: 700, letterSpacing: '.12em' }}>BOOKING</p>
+        <h1>Đặt thuê máy</h1>
+        <label>Số ngày <input type="number" min="1" value={days} onChange={(event) => setDays(Number(event.target.value))} /></label>
+        <label>Số lượng <input type="number" min="1" value={quantity} onChange={(event) => setQuantity(Number(event.target.value))} /></label>
+        <p>Tổng đơn vị thuê: {total}</p>
+        <a href="/checkout">Tiếp tục thanh toán →</a>
+      </section>
+    </main>
   );
 }
-export function CartPage() {
-  return (
-    <section>
-      <h1>Your cart</h1>
-      <p>Your saved machines will appear here after cart functionality is implemented.</p>
-    </section>
-  );
-}
-export function CheckoutPage() {
-  return (
-    <section>
-      <h1>Checkout</h1>
-      <p>Checkout and payment processing are planned for a future phase.</p>
-    </section>
-  );
-}
+
+export default BookingPage;
