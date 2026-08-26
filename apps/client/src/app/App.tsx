@@ -1,13 +1,5 @@
-import { AppProviders } from '@/app/providers/AppProviders';
-import { AppRouter } from '@/app/router';
-import { ErrorBoundary } from '@/components/feedback/ErrorBoundary';
-
 export function App() {
-  return (
-    <ErrorBoundary>
-      <AppProviders>
-        <AppRouter />
-      </AppProviders>
-    </ErrorBoundary>
-  );
+  return <main style={{ minHeight: '100vh', padding: '56px 24px', background: '#f5fafb', color: '#172033' }}><section style={{ maxWidth: 1100, margin: '0 auto', padding: '56px', borderRadius: 28, background: 'linear-gradient(135deg,#0d2943,#087c83)', color: '#fff', boxShadow: '0 24px 60px rgba(20,55,72,.14)' }}><p style={{ margin: 0, color: '#8ee5df', fontWeight: 900, letterSpacing: '.18em' }}>MACHINE RENTAL</p><h1 style={{ margin: '18px 0 12px', fontSize: 'clamp(38px,6vw,72px)', lineHeight: 1.02, letterSpacing: '-.06em' }}>Thuê máy chủ<br /><span style={{ color: '#ffb77c' }}>nhanh & đơn giản.</span></h1><p style={{ maxWidth: 600, color: '#d5eeee', lineHeight: 1.7 }}>Khám phá cấu hình máy phù hợp, chọn nhà cung cấp và hoàn tất thanh toán trong vài bước.</p><nav style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginTop: 30 }}><a href="/auth" style={{ padding: '14px 20px', borderRadius: 12, background: '#ec8d3b', color: '#fff', textDecoration: 'none', fontWeight: 900 }}>Đăng nhập</a><a href="/machines" style={{ padding: '14px 20px', borderRadius: 12, background: '#fff', color: '#087e82', textDecoration: 'none', fontWeight: 900 }}>Xem danh sách máy →</a></nav></section></main>;
 }
+
+export default App;
