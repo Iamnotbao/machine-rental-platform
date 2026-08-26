@@ -1,8 +1,8 @@
 import { useMemo, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { machineConfigs } from '@/features/machines/data/machine-config.mock';
 import { ROUTES } from '@/constants/route.constants';
-import styles from './page.module.css';
+import styles from '@/features/payments/payment.module.css';
 
 const money = new Intl.NumberFormat('vi-VN', {
   style: 'currency',
@@ -10,7 +10,7 @@ const money = new Intl.NumberFormat('vi-VN', {
   maximumFractionDigits: 0,
 });
 
-type Method = 'momo' | 'bank';
+type Method = 'momo' | 'bank' | 'card';
 
 const providerNames: Record<string, string> = {
   'provider-a': 'Nhà cung cấp A',
@@ -25,79 +25,74 @@ export function CheckoutPage() {
   const [method, setMethod] = useState<Method>('momo');
   const [processing, setProcessing] = useState(false);
 
-  if (!fallbackConfig) {
-    return <main className={styles.page}>Không có cấu hình máy để thanh toán.</main>;
-  }
+  if (!fallbackConfig) return <main className={styles.page}>Không có cấu hình máy để thanh toán.</main>;
 
   const config = machineConfigs.find((item) => item.id === params.get('configId')) ?? fallbackConfig;
-  const quantity = Math.min(
-    config.availableCount,
-    Math.max(1, Number(params.get('quantity')) || 1),
-  );
+  const quantity = Math.min(config.availableCount, Math.max(1, Number(params.get('quantity')) || 1));
   const days = Math.max(1, Number(params.get('days')) || 1);
-  const provider = providerNames[params.get('provider') ?? config.providerId] ?? config.providerId;
+  const providerId = (params.get('provider') ?? config.providerId).toLowerCase();
+  const provider = providerNames[providerId] ?? providerId;
   const unit = Math.round(config.pricing.month / 30);
   const total = unit * quantity * days;
+  const purchaseId = params.get('purchaseId') ?? `PUR-${config.id}`;
+  const billingId = params.get('billingId') ?? 'billing-1';
   const methodLabel = useMemo(
-    () => (method === 'momo' ? 'MoMo' : 'chuyển khoản ngân hàng'),
+    () => method === 'momo' ? 'MoMo' : method === 'bank' ? 'chuyển khoản ngân hàng' : 'thẻ',
     [method],
   );
 
-  function submitPayment() {
+  function finish(result: 'success' | 'failed') {
     setProcessing(true);
     window.setTimeout(() => {
-      navigate(ROUTES.orderSuccess, {
-        state: { configId: config.id, quantity, days, total, provider },
+      const next = new URLSearchParams({
+        configId: config.id,
+        quantity: String(quantity),
+        days: String(days),
+        provider: providerId,
+        billingId,
+        purchaseId,
+        total: String(total),
+        method,
       });
-    }, 900);
+      navigate(`${result === 'success' ? ROUTES.paymentSuccess : ROUTES.paymentFailed}?${next.toString()}`);
+    }, 650);
   }
 
   return (
     <main className={styles.page}>
-      <section className={styles.layout}>
-        <div className={styles.panel}>
-          <p className={styles.kicker}>CHECKOUT</p>
-          <h1>Hoàn tất đơn thuê</h1>
-          <p>Chọn phương thức thanh toán. Đây là giao diện mô phỏng, chưa phát sinh giao dịch thật.</p>
-
-          <div className={styles.methods}>
-            <button type="button" className={method === 'momo' ? styles.selected : ''} onClick={() => setMethod('momo')}>
-              <strong>Ví MoMo</strong>
-              <span>Thanh toán bằng ứng dụng MoMo</span>
-            </button>
-            <button type="button" className={method === 'bank' ? styles.selected : ''} onClick={() => setMethod('bank')}>
-              <strong>Chuyển khoản ngân hàng</strong>
-              <span>Nhận thông tin tài khoản để chuyển khoản</span>
-            </button>
-          </div>
-
-          <div className={styles.paymentBox}>
-            {method === 'momo' ? (
-              <p>Mở MoMo và sử dụng mã thanh toán mô phỏng để tiếp tục.</p>
-            ) : (
-              <div>
-                <strong>Vietcombank · 0123 456 789</strong>
-                <p>Nội dung: MACHINE-{config.id.toUpperCase()}</p>
-              </div>
-            )}
-          </div>
-
-          <button type="button" className={styles.submit} disabled={processing} onClick={submitPayment}>
-            {processing ? 'Đang xử lý...' : `Xác nhận thanh toán qua ${methodLabel}`}
-          </button>
+      <div className={styles.container}>
+        <div className={styles.topbar}>
+          <div><p className={styles.eyebrow}>Checkout · Bước 3/3</p><h1 className={styles.title}>Thanh toán đơn thuê</h1><p className={styles.subtitle}>Chọn phương thức thanh toán. Hai nút test bên dưới giúp xem cả giao diện thành công và thất bại trước khi tích hợp cổng thanh toán thật.</p></div>
+          <nav className={styles.nav}><Link to={ROUTES.billing}>Billing</Link><Link to={ROUTES.paymentHistory}>Lịch sử thanh toán</Link></nav>
         </div>
 
-        <aside className={styles.summary}>
-          <p className={styles.kicker}>ORDER SUMMARY</p>
-          <h2>{config.name}</h2>
-          <span>{provider}</span>
-          <span>{config.location} · {config.os}</span>
-          <div className={styles.line}><span>Số lượng</span><strong>{quantity} máy</strong></div>
-          <div className={styles.line}><span>Thời gian thuê</span><strong>{days} ngày</strong></div>
-          <div className={styles.line}><span>Đơn giá/ngày</span><strong>{money.format(unit)}</strong></div>
-          <div className={styles.total}><span>Tổng thanh toán</span><strong>{money.format(total)}</strong></div>
-        </aside>
-      </section>
+        <section className={styles.grid}>
+          <div className={styles.card}>
+            <h2>Phương thức thanh toán</h2>
+            <div className={styles.methods}>
+              <button type="button" className={`${styles.method} ${method === 'momo' ? styles.selected : ''}`} onClick={() => setMethod('momo')}><strong>Ví MoMo</strong><span>Thanh toán bằng QR / ứng dụng MoMo</span></button>
+              <button type="button" className={`${styles.method} ${method === 'bank' ? styles.selected : ''}`} onClick={() => setMethod('bank')}><strong>Chuyển khoản ngân hàng</strong><span>Nhận nội dung chuyển khoản cho đơn hàng</span></button>
+              <button type="button" className={`${styles.method} ${method === 'card' ? styles.selected : ''}`} onClick={() => setMethod('card')}><strong>Thẻ thanh toán</strong><span>Giao diện mô phỏng Visa / Mastercard</span></button>
+            </div>
+
+            <div className={styles.notice}>Đang chọn: <strong>{methodLabel}</strong>. Purchase ID: <strong>{purchaseId}</strong></div>
+            <div className={styles.actions}>
+              <button type="button" className={styles.primary} disabled={processing} onClick={() => finish('success')}>{processing ? 'Đang xử lý...' : 'Test thanh toán thành công'}</button>
+              <button type="button" className={styles.danger} disabled={processing} onClick={() => finish('failed')}>Test thanh toán thất bại</button>
+            </div>
+          </div>
+
+          <aside className={`${styles.card} ${styles.summary}`}>
+            <p className={styles.eyebrow}>Order summary</p><h2>{config.name}</h2>
+            <div className={styles.row}><span>Provider</span><strong>{provider}</strong></div>
+            <div className={styles.row}><span>Billing</span><strong>{billingId}</strong></div>
+            <div className={styles.row}><span>Số lượng</span><strong>{quantity} máy</strong></div>
+            <div className={styles.row}><span>Thời gian thuê</span><strong>{days} ngày</strong></div>
+            <div className={styles.row}><span>Đơn giá/ngày</span><strong>{money.format(unit)}</strong></div>
+            <div className={styles.total}><span>Tổng thanh toán</span><strong>{money.format(total)}</strong></div>
+          </aside>
+        </section>
+      </div>
     </main>
   );
 }
