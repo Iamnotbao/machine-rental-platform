@@ -1,12 +1,12 @@
 import { createBrowserRouter } from 'react-router-dom';
 import HomePage from '@/pages/Home';
 import AuthPage from '@/pages/Auth';
-import MachinesPage, { MachineDetailPage } from '@/pages/Machines';
+import { MachinesPage, MachineDetailPage } from '@/pages/Machines';
 import BookingPage from '@/pages/Booking';
 import CheckoutPage from '@/pages/Checkout';
 import OrderSuccessPage from '@/pages/OrderSuccess';
 import AccountPage from '@/pages/Account';
-import NotFoundPage from '@/pages/NotFound';
+import { NotFoundPage } from '@/pages/NotFound';
 import { ROUTES } from '@/constants/route.constants';
 
 export const routes = [
