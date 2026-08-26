@@ -1,26 +1,12 @@
-import { machines } from "../data/machine-config.mock";
-
-import type { Machine } from "../types";
-
+import { machineConfigs } from '../data/machine-config.mock';
+import type { MachineConfig } from '../types';
 
 export const machineService = {
+  async getMachines(): Promise<MachineConfig[]> {
+    return machineConfigs;
+  },
 
-
- async getMachines():Promise<Machine[]> {
-
-   return machines;
-
- },
-
-
- async getMachineById(
-  id:string
- ):Promise<Machine | undefined>{
-
-   return machines.find(
-    item=>item.id===id
-   );
-
- }
-
+  async getMachineById(id: string): Promise<MachineConfig | undefined> {
+    return machineConfigs.find((item) => item.id === id);
+  },
 };

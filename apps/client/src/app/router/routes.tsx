@@ -1,3 +1,4 @@
+import { createBrowserRouter } from 'react-router-dom';
 import HomePage from '@/pages/Home';
 import AuthPage from '@/pages/Auth';
 import MachinesPage, { MachineDetailPage } from '@/pages/Machines';
@@ -6,15 +7,19 @@ import CheckoutPage from '@/pages/Checkout';
 import OrderSuccessPage from '@/pages/OrderSuccess';
 import AccountPage from '@/pages/Account';
 import NotFoundPage from '@/pages/NotFound';
+import { ROUTES } from '@/constants/route.constants';
 
 export const routes = [
-  { path: '/', element: <HomePage /> },
-  { path: '/auth', element: <AuthPage /> },
-  { path: '/machines', element: <MachinesPage /> },
-  { path: '/machines/:id', element: <MachineDetailPage /> },
-  { path: '/booking', element: <BookingPage /> },
-  { path: '/checkout', element: <CheckoutPage /> },
-  { path: '/order-success', element: <OrderSuccessPage /> },
-  { path: '/account', element: <AccountPage /> },
-  { path: '*', element: <NotFoundPage /> },
+  { path: ROUTES.home, element: <HomePage /> },
+  { path: ROUTES.auth, element: <AuthPage /> },
+  { path: ROUTES.machines, element: <MachinesPage /> },
+  { path: ROUTES.providerMachines, element: <MachinesPage /> },
+  { path: ROUTES.machineDetail, element: <MachineDetailPage /> },
+  { path: ROUTES.booking, element: <BookingPage /> },
+  { path: ROUTES.checkout, element: <CheckoutPage /> },
+  { path: ROUTES.orderSuccess, element: <OrderSuccessPage /> },
+  { path: ROUTES.account, element: <AccountPage /> },
+  { path: ROUTES.notFound, element: <NotFoundPage /> },
 ];
+
+export const router = createBrowserRouter(routes);
