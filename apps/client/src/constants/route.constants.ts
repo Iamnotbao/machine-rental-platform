@@ -5,6 +5,7 @@ export const ROUTES = {
   machineBooking: '/machines/:id/booking',
   cart: '/cart',
   checkout: '/checkout',
+  orderSuccess: '/order-success',
   orders: '/orders',
   orderDetail: '/orders/:id',
   profile: '/profile',
