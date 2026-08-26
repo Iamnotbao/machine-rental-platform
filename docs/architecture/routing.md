@@ -7,14 +7,14 @@ The implemented Client route foundation is:
 | `/` | Customer landing page |
 | `/machines` | Machine catalog |
 | `/machines/:id` | Machine detail |
-| `/machines/:id/booking` | Legacy booking entry |
-| `/booking` | Query-based booking review |
-| `/purchase` | Purchase confirmation and billing selection |
-| `/checkout` | Mock payment method selection |
-| `/payment/success` | Mock successful payment result |
-| `/payment/failed` | Mock failed payment result and retry |
-| `/payments/history` | Mock payment history |
-| `/billing` | Mock billing profile editor |
+| `/machines/:id/booking` | Protected legacy booking entry |
+| `/booking` | Protected query-based booking review |
+| `/purchase` | Protected purchase confirmation and billing selection |
+| `/checkout` | Protected mock payment method selection |
+| `/payment/success` | Protected mock successful payment result |
+| `/payment/failed` | Protected mock failed payment result and retry |
+| `/payments/history` | Protected mock payment history |
+| `/billing` | Protected mock billing profile editor |
 | `/cart` | Customer cart |
 | `/orders` | Customer orders |
 | `/orders/:id` | Order detail |
@@ -22,9 +22,11 @@ The implemented Client route foundation is:
 | `/login` | Sign in |
 | `/register` | Registration |
 
-The current payment flow is UI-first. Booking, purchase, checkout, billing, and payment-history screens intentionally use mock data and are directly previewable while the Backend is still absent. Customer account/order routes remain behind `ProtectedRoute`.
+Browsing machines remains public. Starting a rental or entering purchase, checkout, billing, payment result/history, cart, order, or profile screens requires an authenticated customer session through `ProtectedRoute`.
 
-The payment feature keeps mock data and a service seam under `features/payments` so future Backend integration can replace mock service behavior without embedding API requests in pages.
+Authentication is UI-first while the Backend is absent. The current mock credential is `admin` / `admin`; the mock auth service is isolated under `features/auth` and the session is persisted locally so the service can later be replaced by the real authentication API.
+
+Payment methods are also mock-driven. Method metadata, including image URLs, lives under `features/payments/data`, while checkout renders radio-button selection cards. This keeps payment presentation separate from the future Backend/payment-gateway integration.
 
 ## Admin routes
 

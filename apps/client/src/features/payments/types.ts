@@ -1,6 +1,14 @@
 export type PaymentMethod = 'momo' | 'bank' | 'card';
 export type PaymentStatus = 'PENDING' | 'PAID' | 'FAILED';
 
+export interface PaymentMethodOption {
+  id: PaymentMethod;
+  label: string;
+  description: string;
+  imageUrl: string;
+  imageAlt: string;
+}
+
 export interface PurchaseDraft {
   configId: string;
   providerId: string;

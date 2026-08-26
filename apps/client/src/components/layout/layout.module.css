@@ -22,6 +22,7 @@
   margin-left: clamp(0.8rem, 2vw, 1.8rem);
   text-decoration: none;
 }
+.sessionActions{display:flex;align-items:center;gap:10px}.sessionActions .loginAction{margin-left:0}.logoutAction{border:0;background:transparent;color:var(--color-muted);font:inherit;font-size:.78rem;font-weight:700;cursor:pointer;padding:6px}.logoutAction:hover{color:var(--color-primary)}
 .footer {
   background: #10231d;
   color: var(--color-dark-muted);
@@ -113,7 +114,8 @@
 }
 @media (max-width: 42rem) {
   .rentAction,
-  .loginAction {
+  .loginAction,
+  .logoutAction {
     display: none;
   }
 }

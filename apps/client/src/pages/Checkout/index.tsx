@@ -1,6 +1,8 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { machineConfigs } from '@/features/machines/data/machine-config.mock';
+import { paymentMethods } from '@/features/payments/data/payment-method.mock';
+import type { PaymentMethod } from '@/features/payments/types';
 import { ROUTES } from '@/constants/route.constants';
 import styles from '@/features/payments/payment.module.css';
 
@@ -9,8 +11,6 @@ const money = new Intl.NumberFormat('vi-VN', {
   currency: 'VND',
   maximumFractionDigits: 0,
 });
-
-type Method = 'momo' | 'bank' | 'card';
 
 const providerNames: Record<string, string> = {
   'provider-a': 'Nhà cung cấp A',
@@ -22,7 +22,7 @@ export function CheckoutPage() {
   const [params] = useSearchParams();
   const navigate = useNavigate();
   const fallbackConfig = machineConfigs[0];
-  const [method, setMethod] = useState<Method>('momo');
+  const [method, setMethod] = useState<PaymentMethod>('momo');
   const [processing, setProcessing] = useState(false);
 
   if (!fallbackConfig) return <main className={styles.page}>Không có cấu hình máy để thanh toán.</main>;
@@ -36,10 +36,7 @@ export function CheckoutPage() {
   const total = unit * quantity * days;
   const purchaseId = params.get('purchaseId') ?? `PUR-${config.id}`;
   const billingId = params.get('billingId') ?? 'billing-1';
-  const methodLabel = useMemo(
-    () => method === 'momo' ? 'MoMo' : method === 'bank' ? 'chuyển khoản ngân hàng' : 'thẻ',
-    [method],
-  );
+  const selectedMethod = paymentMethods.find((item) => item.id === method) ?? paymentMethods[0];
 
   function finish(result: 'success' | 'failed') {
     setProcessing(true);
@@ -62,7 +59,7 @@ export function CheckoutPage() {
     <main className={styles.page}>
       <div className={styles.container}>
         <div className={styles.topbar}>
-          <div><p className={styles.eyebrow}>Checkout · Bước 3/3</p><h1 className={styles.title}>Thanh toán đơn thuê</h1><p className={styles.subtitle}>Chọn phương thức thanh toán. Hai nút test bên dưới giúp xem cả giao diện thành công và thất bại trước khi tích hợp cổng thanh toán thật.</p></div>
+          <div><p className={styles.eyebrow}>Checkout · Bước 3/3</p><h1 className={styles.title}>Thanh toán đơn thuê</h1><p className={styles.subtitle}>Chọn một phương thức thanh toán. Hình minh họa đang lấy từ mock data nên sau này chỉ cần thay URL ảnh hoặc dữ liệu từ backend.</p></div>
           <nav className={styles.nav}><Link to={ROUTES.billing}>Billing</Link><Link to={ROUTES.paymentHistory}>Lịch sử thanh toán</Link></nav>
         </div>
 
@@ -70,12 +67,25 @@ export function CheckoutPage() {
           <div className={styles.card}>
             <h2>Phương thức thanh toán</h2>
             <div className={styles.methods}>
-              <button type="button" className={`${styles.method} ${method === 'momo' ? styles.selected : ''}`} onClick={() => setMethod('momo')}><strong>Ví MoMo</strong><span>Thanh toán bằng QR / ứng dụng MoMo</span></button>
-              <button type="button" className={`${styles.method} ${method === 'bank' ? styles.selected : ''}`} onClick={() => setMethod('bank')}><strong>Chuyển khoản ngân hàng</strong><span>Nhận nội dung chuyển khoản cho đơn hàng</span></button>
-              <button type="button" className={`${styles.method} ${method === 'card' ? styles.selected : ''}`} onClick={() => setMethod('card')}><strong>Thẻ thanh toán</strong><span>Giao diện mô phỏng Visa / Mastercard</span></button>
+              {paymentMethods.map((option) => (
+                <label key={option.id} className={`${styles.method} ${method === option.id ? styles.selected : ''}`}>
+                  <input
+                    type="radio"
+                    name="payment-method"
+                    value={option.id}
+                    checked={method === option.id}
+                    onChange={() => setMethod(option.id)}
+                  />
+                  <img src={option.imageUrl} alt={option.imageAlt} />
+                  <span className={styles.methodCopy}>
+                    <strong>{option.label}</strong>
+                    <span>{option.description}</span>
+                  </span>
+                </label>
+              ))}
             </div>
 
-            <div className={styles.notice}>Đang chọn: <strong>{methodLabel}</strong>. Purchase ID: <strong>{purchaseId}</strong></div>
+            {selectedMethod && <div className={styles.methodPreview}><img src={selectedMethod.imageUrl} alt="" /><div><span>Đang chọn</span><strong>{selectedMethod.label}</strong><small>Purchase ID: {purchaseId}</small></div></div>}
             <div className={styles.actions}>
               <button type="button" className={styles.primary} disabled={processing} onClick={() => finish('success')}>{processing ? 'Đang xử lý...' : 'Test thanh toán thành công'}</button>
               <button type="button" className={styles.danger} disabled={processing} onClick={() => finish('failed')}>Test thanh toán thất bại</button>
