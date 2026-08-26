@@ -1,0 +1,8 @@
+import { useMemo, useState } from 'react';
+import { BlogCard } from '@/features/blogs/components/BlogCard';
+import { useBlogArticles } from '@/features/blogs/hooks/useBlogs';
+import type { BlogCategory } from '@/features/blogs/types';
+import styles from './page.module.css';
+
+const PAGE_SIZE=6; const categories:Array<'Tất cả'|BlogCategory>=['Tất cả','Hướng dẫn','Hạ tầng','Bảo mật','Vận hành'];
+export default function NewsPage(){const {data=[],isLoading}=useBlogArticles();const [category,setCategory]=useState<(typeof categories)[number]>('Tất cả');const [page,setPage]=useState(1);const filtered=useMemo(()=>category==='Tất cả'?data:data.filter((item)=>item.category===category),[data,category]);const pageCount=Math.max(1,Math.ceil(filtered.length/PAGE_SIZE));const visible=filtered.slice((page-1)*PAGE_SIZE,page*PAGE_SIZE);return <main className={styles.page}><header><span>TIN TỨC</span><h1>Kiến thức thuê và vận hành máy chủ</h1><p>Nội dung hiện dùng mock service; khi backend hoàn thiện, page này chỉ cần thay nguồn dữ liệu trong service.</p></header><div className={styles.filters}>{categories.map((item)=><button type="button" key={item} className={item===category?styles.active:''} onClick={()=>{setCategory(item);setPage(1)}}>{item}</button>)}</div>{isLoading?<p>Đang tải...</p>:<section className={styles.grid}>{visible.map((article)=><BlogCard key={article.id} article={article}/>)}</section>}<div className={styles.pagination}>{Array.from({length:pageCount},(_,index)=>index+1).map((number)=><button type="button" key={number} className={number===page?styles.activePage:''} onClick={()=>setPage(number)}>{number}</button>)}</div></main>}

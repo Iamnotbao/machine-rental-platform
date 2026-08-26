@@ -1,0 +1,7 @@
+import { Link, useParams } from 'react-router-dom';
+import { BlogCard } from '@/features/blogs/components/BlogCard';
+import { useBlogArticle, useRelatedBlogArticles } from '@/features/blogs/hooks/useBlogs';
+import { ROUTES } from '@/constants/route.constants';
+import styles from './page.module.css';
+
+export default function BlogDetailPage(){const {slug=''}=useParams<{slug:string}>();const {data:article,isLoading}=useBlogArticle(slug);const {data:related=[]}=useRelatedBlogArticles(article?.id??'',article?.category??'Hướng dẫn',Boolean(article));if(isLoading)return <main className={styles.page}>Đang tải bài viết...</main>;if(!article)return <main className={styles.page}><h1>Không tìm thấy bài viết</h1><Link to={ROUTES.news}>Quay lại tin tức</Link></main>;return <main className={styles.page}><article><Link className={styles.back} to={ROUTES.news}>← Tin tức</Link><span className={styles.category}>{article.category}</span><h1>{article.title}</h1><p className={styles.lead}>{article.excerpt}</p><div className={styles.meta}>{article.author} · {article.readMinutes} phút đọc</div><img className={styles.cover} src={article.imageUrl} alt=""/><div className={styles.content}>{article.content.map((paragraph,index)=><p key={index}>{paragraph}</p>)}</div><div className={styles.tags}>{article.tags.map((tag)=><span key={tag}>{tag}</span>)}</div></article><section className={styles.related}><h2>Bài viết liên quan</h2><div>{related.map((item)=><BlogCard key={item.id} article={item}/>)}</div></section></main>}

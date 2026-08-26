@@ -1,5 +1,9 @@
 export const ROUTES = {
   home: '/',
+  about: '/about',
+  news: '/news',
+  blogDetail: '/news/:slug',
+  contact: '/contact',
   machines: '/machines',
   machineDetail: '/machines/:id',
   machineBooking: '/machines/:id/booking',

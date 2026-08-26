@@ -1,26 +1,13 @@
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-export function OrdersPage() {
-  return (
-    <section>
-      <h1>Orders</h1>
-      <p>Order history will be available after the rental backend is connected.</p>
-    </section>
-  );
-}
-export function OrderDetailPage() {
-  const { id } = useParams();
-  return (
-    <section>
-      <h1>Order {id}</h1>
-      <p>Order details are not connected in this foundation.</p>
-    </section>
-  );
-}
-export function ProfilePage() {
-  return (
-    <section>
-      <h1>Profile</h1>
-      <p>Profile management is reserved for the authenticated customer experience.</p>
-    </section>
-  );
-}
+import { useAccountDashboard } from '@/features/account/hooks/useAccountDashboard';
+import styles from './page.module.css';
+
+const money=new Intl.NumberFormat('vi-VN',{style:'currency',currency:'VND',maximumFractionDigits:0});
+export function OrdersPage(){return <section className={styles.simple}><h1>Đơn thuê</h1><p>Lịch sử đơn thuê sẽ được nối backend ở phase sau.</p></section>}
+export function OrderDetailPage(){const{id}=useParams();return <section className={styles.simple}><h1>Đơn {id}</h1><p>Chi tiết đơn sẽ lấy từ order service khi backend sẵn sàng.</p></section>}
+
+type Tab='info'|'wallet'|'transactions'|'topups'|'notifications';
+export function ProfilePage(){const {data,isLoading}=useAccountDashboard();const [tab,setTab]=useState<Tab>('info');if(isLoading||!data)return <main className={styles.page}>Đang tải hồ sơ...</main>;const tabs:[Tab,string][]=[['info','Thông tin'],['wallet','Ví'],['transactions','Lịch sử giao dịch'],['topups','Lịch sử nạp'],['notifications','Thông báo']];return <main className={styles.page}><header><span>TÀI KHOẢN</span><h1>{data.profile.name}</h1><p>{data.profile.email} · {data.profile.company}</p></header><nav className={styles.tabs}>{tabs.map(([id,label])=><button type="button" className={tab===id?styles.active:''} key={id} onClick={()=>setTab(id)}>{label}{id==='notifications'&&data.notifications.filter((item)=>!item.read).length>0?<b>{data.notifications.filter((item)=>!item.read).length}</b>:null}</button>)}</nav><section className={styles.panel}>{tab==='info'&&<div className={styles.infoGrid}><Field label="Tên" value={data.profile.name}/><Field label="Tài khoản" value={data.profile.username}/><Field label="Email" value={data.profile.email}/><Field label="Điện thoại" value={data.profile.phone}/><Field label="Công ty" value={data.profile.company}/><Field label="Ngày tham gia" value={new Date(data.profile.joinedAt).toLocaleDateString('vi-VN')}/></div>}{tab==='wallet'&&<div className={styles.wallet}><article><span>Số dư khả dụng</span><strong>{money.format(data.wallet.balance)}</strong></article><article><span>Đang giữ cho đơn thuê</span><strong>{money.format(data.wallet.reserved)}</strong></article><button type="button">Nạp tiền (UI mock)</button></div>}{tab==='transactions'&&<Table rows={data.transactions.map((item)=>[item.id,item.description,item.type,money.format(item.amount),new Date(item.createdAt).toLocaleString('vi-VN'),item.status])}/>} {tab==='topups'&&<Table rows={data.topups.map((item)=>[item.id,item.method,money.format(item.amount),new Date(item.createdAt).toLocaleString('vi-VN'),item.status])}/>} {tab==='notifications'&&<div className={styles.notifications}>{data.notifications.map((item)=><article key={item.id} className={!item.read?styles.unread:''}><div><h3>{item.title}</h3><p>{item.message}</p></div><time>{new Date(item.createdAt).toLocaleString('vi-VN')}</time></article>)}</div>}</section></main>}
+function Field({label,value}:{label:string;value:string}){return <article className={styles.field}><span>{label}</span><strong>{value}</strong></article>}
+function Table({rows}:{rows:string[][]}){return <div className={styles.tableWrap}><table><tbody>{rows.map((row)=><tr key={row[0]}>{row.map((cell,index)=><td key={`${row[0]}-${index}`}>{cell}</td>)}</tr>)}</tbody></table></div>}

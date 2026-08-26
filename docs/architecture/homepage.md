@@ -1,26 +1,9 @@
 # Client homepage architecture
 
-The Client homepage is composed at `pages/Home/Home.tsx`. It keeps sections independent so that landing-page content can evolve without turning the route into one large component.
+The Client homepage is composed at `pages/Home/Home.tsx` and currently contains `Hero`, `FeaturedMachines`, `AboutPreview`, and `BlogCarousel` sections.
 
-```text
-Home page
-├── Hero
-├── Statistics (Counter)
-├── FeaturedMachines (MachineCard)
-├── HowItWorks
-├── WhyChooseUs
-├── AboutCompany
-├── Testimonials
-├── CTA
-└── Newsletter
-```
+`AboutPreview` introduces the product and links to the dedicated `/about` page. `BlogCarousel` consumes the blog feature hook, shows three cards per logical page on desktop, supports previous/next controls and numbered pages, auto-advances every 4.5 seconds, and pauses while hovered or keyboard-focused.
 
-Homepage machine content is held in `features/machines/mock/featuredMachines.ts`. It is presentation-only data; a future machine feature hook and service can replace that source without moving API logic into cards or sections.
+Blog data is UI-first under `features/blogs/data`, accessed through `blog-ui.service.ts` and TanStack Query hooks. News listing and blog-detail pages therefore do not depend directly on mock arrays and can later switch to Backend APIs through the service boundary.
 
-## Shared UI
-
-`packages/ui` contains only app-neutral primitives. The homepage uses its `Button`, `Card`, `Badge`, `Container`, `Section`, `IconWrapper`, `Heading`, and `Text` components. Machine-specific cards remain in the Client feature/page layer.
-
-## Animation strategy
-
-`hooks/useIntersectionObserver.ts` provides reusable viewport detection. `components/motion/Reveal.tsx` uses it to apply fade-up, fade-left, and fade-right entry states. The statistics `Counter` begins only after its value enters the viewport. CSS disables visual transitions when a user has enabled `prefers-reduced-motion`; counters immediately render their final value in that mode.
+The homepage machine/provider section continues to use machine mock data until the machine backend is connected.
