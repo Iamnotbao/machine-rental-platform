@@ -6,7 +6,9 @@ import { PublicRoute } from '@/app/router/PublicRoute';
 import { ROUTES } from '@/constants/route.constants';
 import { OrderDetailPage, OrdersPage, ProfilePage } from '@/pages/Account';
 import { LoginPage, RegisterPage } from '@/pages/Auth';
-import { BookingPage, CartPage, CheckoutPage } from '@/pages/Booking';
+import { BookingPage, CartPage } from '@/pages/Booking';
+import CheckoutPage from '@/pages/Checkout';
+import OrderSuccessPage from '@/pages/OrderSuccess';
 import { ErrorPage } from '@/pages/Error';
 import { HomePage } from '@/pages/Home';
 import { MachinesPage, MachineDetailPage } from '@/pages/Machines';
@@ -31,6 +33,7 @@ export const router = createBrowserRouter([
         children: [
           { path: ROUTES.cart, element: <CartPage /> },
           { path: ROUTES.checkout, element: <CheckoutPage /> },
+          { path: ROUTES.orderSuccess, element: <OrderSuccessPage /> },
           { path: ROUTES.orders, element: <OrdersPage /> },
           { path: ROUTES.orderDetail, element: <OrderDetailPage /> },
           { path: ROUTES.profile, element: <ProfilePage /> },
