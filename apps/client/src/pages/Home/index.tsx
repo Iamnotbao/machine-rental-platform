@@ -1,1 +1,4 @@
-export { HomePage } from './Home';
+import HomePage from './Home';
+
+export { HomePage };
+export default HomePage;
