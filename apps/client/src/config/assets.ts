@@ -3,3 +3,6 @@ const fallbackMockImageUrl =
 
 export const MOCK_CONTENT_IMAGE_URL =
   import.meta.env.VITE_MOCK_IMAGE_URL?.trim() || fallbackMockImageUrl;
+
+export const MACHINE_CHECKER_DOWNLOAD_URL =
+  import.meta.env.VITE_MACHINE_CHECKER_DOWNLOAD_URL?.trim() || '';
