@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useSyncExternalStore } from 'react';
 import { createPortal } from 'react-dom';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/constants/route.constants';
+import { authStore } from '@/store/auth/auth.store';
 import styles from './navigation.module.css';
 
 const links = [
@@ -13,8 +14,23 @@ const links = [
 ];
 
 export function Navigation() {
-  const [isOpen, setIsOpen] = useState(false);
-  const close = () => setIsOpen(false);
+  const [isOpen, setIsOpen] = useSyncExternalStore(
+    (listener) => {
+      const handler = () => listener();
+      window.addEventListener('rentora-navigation-toggle', handler);
+      return () => window.removeEventListener('rentora-navigation-toggle', handler);
+    },
+    () => document.body.dataset.navigationOpen === 'true',
+    () => false,
+  );
+  const session = useSyncExternalStore(authStore.subscribe, authStore.getSession, () => null);
+  const navigate = useNavigate();
+
+  const setOpen = (open: boolean) => {
+    document.body.dataset.navigationOpen = String(open);
+    window.dispatchEvent(new Event('rentora-navigation-toggle'));
+  };
+  const close = () => setOpen(false);
 
   useEffect(() => {
     if (!isOpen) return undefined;
@@ -27,12 +43,24 @@ export function Navigation() {
     };
 
     window.addEventListener('keydown', handleKeyDown);
-
     return () => {
       document.body.style.overflow = previousOverflow;
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [isOpen]);
+
+  const logout = () => {
+    authStore.setSession(null);
+    close();
+    navigate(ROUTES.home);
+  };
+
+  const initials = session?.user.name
+    .split(' ')
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase())
+    .join('') || 'U';
 
   const overlay = (
     <>
@@ -48,6 +76,29 @@ export function Navigation() {
           <div><span>RENTORA</span><strong>Điều hướng</strong></div>
           <button type="button" onClick={close}>Đóng</button>
         </div>
+
+        {session ? (
+          <section className={styles.accountCard}>
+            <div className={styles.avatar} aria-hidden="true">{initials}</div>
+            <div className={styles.accountCopy}>
+              <span>ĐANG ĐĂNG NHẬP</span>
+              <strong>{session.user.name}</strong>
+              <small>{session.user.email}</small>
+            </div>
+            <NavLink className={styles.accountLink} onClick={close} to={ROUTES.profile}>Tài khoản</NavLink>
+            <button className={styles.logoutButton} type="button" onClick={logout}>Đăng xuất</button>
+          </section>
+        ) : (
+          <section className={styles.guestCard}>
+            <span>TÀI KHOẢN</span>
+            <strong>Đăng nhập để quản lý máy thuê và ví</strong>
+            <div>
+              <NavLink onClick={close} to={ROUTES.login}>Đăng nhập</NavLink>
+              <NavLink onClick={close} to={ROUTES.register}>Đăng ký</NavLink>
+            </div>
+          </section>
+        )}
+
         <nav aria-label="Primary navigation">
           {links.map((link) => (
             <NavLink end={link.to === ROUTES.home} key={link.label} onClick={close} to={link.to}>
@@ -56,10 +107,6 @@ export function Navigation() {
             </NavLink>
           ))}
         </nav>
-        <div className={styles.drawerFooter}>
-          <NavLink onClick={close} to={ROUTES.profile}>Tài khoản</NavLink>
-          <NavLink onClick={close} to={ROUTES.login}>Đăng nhập</NavLink>
-        </div>
       </aside>
     </>
   );
@@ -70,15 +117,14 @@ export function Navigation() {
         aria-controls="primary-navigation-drawer"
         aria-expanded={isOpen}
         aria-label="Mở menu điều hướng"
-        className={`${styles.toggle} ${isOpen ? styles.toggleOpen : ''}`}
-        onClick={() => setIsOpen((open) => !open)}
+        className={styles.toggle}
+        onClick={() => setOpen(!isOpen)}
         type="button"
       >
         <span />
         <span />
         <span />
       </button>
-
       {createPortal(overlay, document.body)}
     </div>
   );
