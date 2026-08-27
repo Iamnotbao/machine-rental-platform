@@ -2,6 +2,7 @@ import { useEffect, useState, useSyncExternalStore } from 'react';
 import { createPortal } from 'react-dom';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/constants/route.constants';
+import { MACHINE_CHECKER_DOWNLOAD_URL } from '@/config/assets';
 import { accountDashboard } from '@/features/account/data/account.mock';
 import { authStore } from '@/store/auth/auth.store';
 import styles from './navigation.module.css';
@@ -92,6 +93,16 @@ export function Navigation() {
             </NavLink>
           ))}
         </nav>
+
+        <section className={styles.checkerDownload}>
+          <div>
+            <span>MACHINE CHECKER</span>
+            <strong>Kiểm tra cấu hình máy Windows</strong>
+            <small>ZIP · Get_infor_machine_ver001</small>
+          </div>
+          <a href={MACHINE_CHECKER_DOWNLOAD_URL} target="_blank" rel="noreferrer">Tải phần mềm</a>
+        </section>
+
         {session && <button className={styles.drawerLogout} type="button" onClick={logout}>Đăng xuất tài khoản</button>}
       </aside>
     </>
