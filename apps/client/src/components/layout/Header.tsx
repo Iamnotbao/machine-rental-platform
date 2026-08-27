@@ -23,11 +23,12 @@ export function Header() {
   return (
     <header className={styles.header}>
       <div className={`${styles.content} page-container`}>
-        <Link aria-label={`${APP_NAME} home`} className="brand" to={ROUTES.home}>
-          RENT<span>ORA</span>
-        </Link>
-
-        <Navigation />
+        <div className={styles.leftCluster}>
+          <Navigation />
+          <Link aria-label={`${APP_NAME} home`} className="brand" to={ROUTES.home}>
+            RENT<span>ORA</span>
+          </Link>
+        </div>
 
         <div className={styles.actions}>
           <LanguageSwitcher />
