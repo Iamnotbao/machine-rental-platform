@@ -19,8 +19,8 @@ interface LoginLocationState {
 export function LoginPage() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [username, setUsername] = useState(rememberedUsername || mockLoginHint.username);
-  const [password, setPassword] = useState(mockLoginHint.password);
+  const [username, setUsername] = useState<string>(rememberedUsername || mockLoginHint.username);
+  const [password, setPassword] = useState<string>(mockLoginHint.password);
   const [showPassword, setShowPassword] = useState(false);
   const [remember, setRemember] = useState(Boolean(rememberedUsername));
   const [error, setError] = useState('');
