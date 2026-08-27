@@ -1,4 +1,4 @@
-export type PaymentMethod = 'momo' | 'bank' | 'card';
+export type PaymentMethod = 'momo' | 'bank' | 'card' | 'points';
 export type PaymentStatus = 'PENDING' | 'PAID' | 'FAILED';
 
 export interface PaymentInstructions {
@@ -10,7 +10,7 @@ export interface PaymentInstructions {
 }
 
 export interface PaymentMethodOption {
-  id: PaymentMethod;
+  id: Exclude<PaymentMethod, 'points'>;
   label: string;
   description: string;
   imageUrl: string;
