@@ -66,14 +66,18 @@ export function Navigation() {
 
         {session ? (
           <section className={styles.accountCard}>
-            <div className={styles.avatar} aria-hidden="true">{initials}</div>
-            <div className={styles.accountCopy}>
-              <span>ĐANG ĐĂNG NHẬP</span>
-              <strong>{session.user.name}</strong>
-              <small>{session.user.email}</small>
+            <div className={styles.accountTop}>
+              <div className={styles.avatar} aria-hidden="true">{initials}</div>
+              <div className={styles.accountCopy}>
+                <span><i aria-hidden="true" /> ĐANG ĐĂNG NHẬP</span>
+                <strong>{session.user.name}</strong>
+                <small>{session.user.email}</small>
+              </div>
             </div>
-            <NavLink className={styles.accountLink} onClick={close} to={ROUTES.profile}>Tài khoản</NavLink>
-            <button className={styles.logoutButton} type="button" onClick={logout}>Đăng xuất</button>
+            <div className={styles.accountActions}>
+              <NavLink className={styles.accountLink} onClick={close} to={ROUTES.profile}>Tài khoản</NavLink>
+              <button className={styles.logoutButton} type="button" onClick={logout}>Đăng xuất</button>
+            </div>
           </section>
         ) : (
           <section className={styles.guestCard}>
