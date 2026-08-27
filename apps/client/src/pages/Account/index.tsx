@@ -4,86 +4,38 @@ import { useAccountDashboard, useUpdateAccountProfile } from '@/features/account
 import type { CustomerProfile } from '@/features/account/types';
 import styles from './page.module.css';
 
-const money = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND', maximumFractionDigits: 0 });
-
-export function OrdersPage() { return <section className={styles.simple}><h1>Đơn thuê</h1><p>Lịch sử đơn thuê sẽ được nối backend ở phase sau.</p></section>; }
-export function OrderDetailPage() { const { id } = useParams(); return <section className={styles.simple}><h1>Đơn {id}</h1><p>Chi tiết đơn sẽ lấy từ order service khi backend sẵn sàng.</p></section>; }
-
-type Tab = 'info' | 'wallet' | 'transactions' | 'topups' | 'notifications';
-interface AccountTab { id: Tab; label: string; description: string; }
-const accountTabs: AccountTab[] = [
-  { id: 'info', label: 'Thông tin cá nhân', description: 'Hồ sơ và thông tin liên hệ' },
-  { id: 'wallet', label: 'Ví của tôi', description: 'Số dư và tiền đang giữ' },
-  { id: 'transactions', label: 'Lịch sử giao dịch', description: 'Các biến động trong tài khoản' },
-  { id: 'topups', label: 'Lịch sử nạp tiền', description: 'Các lần nạp tiền vào ví' },
-  { id: 'notifications', label: 'Thông báo', description: 'Cập nhật từ hệ thống' },
+const money = new Intl.NumberFormat('vi-VN',{style:'currency',currency:'VND',maximumFractionDigits:0});
+const PAGE_SIZE=5;
+export function OrdersPage(){return <section className={styles.simple}><h1>Đơn thuê</h1><p>Lịch sử đơn thuê sẽ được nối backend ở phase sau.</p></section>;}
+export function OrderDetailPage(){const{id}=useParams();return <section className={styles.simple}><h1>Đơn {id}</h1><p>Chi tiết đơn sẽ lấy từ order service khi backend sẵn sàng.</p></section>;}
+type Tab='info'|'wallet'|'points'|'vouchers'|'transactions'|'topups'|'notifications';
+const accountTabs=[
+{id:'info' as Tab,label:'Thông tin cá nhân',description:'Hồ sơ và thông tin liên hệ'},
+{id:'wallet' as Tab,label:'Ví của tôi',description:'Số dư tiền và points'},
+{id:'points' as Tab,label:'Points / Coins',description:'Mua points, quét QR và lịch sử'},
+{id:'vouchers' as Tab,label:'Mã giảm giá',description:'Voucher và ưu đãi hiện có'},
+{id:'transactions' as Tab,label:'Lịch sử giao dịch',description:'Các biến động trong tài khoản'},
+{id:'topups' as Tab,label:'Lịch sử nạp tiền',description:'Các lần nạp tiền vào ví'},
+{id:'notifications' as Tab,label:'Thông báo',description:'Cập nhật từ hệ thống'},
 ];
-
-export function ProfilePage() {
-  const { data, isLoading } = useAccountDashboard();
-  const updateProfile = useUpdateAccountProfile();
-  const [tab, setTab] = useState<Tab>('info');
-  const [draft, setDraft] = useState<CustomerProfile | null>(null);
-  const [fromDate, setFromDate] = useState('');
-  const [toDate, setToDate] = useState('');
-  const unreadCount = useMemo(() => data?.notifications.filter((item) => !item.read).length ?? 0, [data]);
-
-  if (isLoading || !data) return <main className={styles.page}>Đang tải hồ sơ...</main>;
-
-  const activeTab = accountTabs.find((item) => item.id === tab) ?? accountTabs[0];
-  const initials = data.profile.name.split(' ').filter(Boolean).slice(0, 2).map((part) => part[0]?.toUpperCase()).join('') || 'U';
-  const transactions = data.transactions.filter((item) => inDateRange(item.createdAt, fromDate, toDate));
-  const topups = data.topups.filter((item) => inDateRange(item.createdAt, fromDate, toDate));
-
-  const beginEdit = () => setDraft({ ...data.profile });
-  const cancelEdit = () => setDraft(null);
-  const saveProfile = async () => {
-    if (!draft) return;
-    await updateProfile.mutateAsync(draft);
-    setDraft(null);
-  };
-
-  return (
-    <main className={styles.page}>
-      <div className={styles.accountLayout}>
-        <aside className={styles.sidebar}>
-          <div className={styles.profileCard}><div className={styles.avatar} aria-hidden="true">{initials}</div><div className={styles.profileIdentity}><span>TÀI KHOẢN</span><h1>{data.profile.name}</h1><p>@{data.profile.username}</p></div><div className={styles.profileMeta}><span>{data.profile.email}</span><span>{data.profile.company}</span></div></div>
-          <nav className={styles.tabs} aria-label="Menu tài khoản">
-            {accountTabs.map((item) => <button type="button" className={tab === item.id ? styles.active : ''} key={item.id} onClick={() => setTab(item.id)} aria-current={tab === item.id ? 'page' : undefined}><span className={styles.tabText}><strong>{item.label}</strong><small>{item.description}</small></span>{item.id === 'notifications' && unreadCount > 0 ? <b className={styles.badge}>{unreadCount}</b> : <span className={styles.chevron} aria-hidden="true">›</span>}</button>)}
-          </nav>
-          <div className={styles.sidebarFoot}><span>Khách hàng từ</span><strong>{new Date(data.profile.joinedAt).toLocaleDateString('vi-VN')}</strong></div>
-        </aside>
-
-        <section className={styles.content}>
-          <header className={styles.contentHeader}>
-            <div><span>TRUNG TÂM TÀI KHOẢN</span><h2>{activeTab?.label}</h2><p>{activeTab?.description}</p></div>
-            {tab === 'wallet' && <div className={styles.balanceChip}><span>Số dư</span><strong>{money.format(data.wallet.balance)}</strong></div>}
-            {tab === 'info' && !draft && <button type="button" className={styles.headerAction} onClick={beginEdit}>Chỉnh sửa thông tin</button>}
-          </header>
-
-          <div className={styles.panel}>
-            {tab === 'info' && !draft && <div className={styles.infoGrid}><Field label="Tên hiển thị" value={data.profile.name}/><Field label="Tài khoản" value={data.profile.username}/><Field label="Email" value={data.profile.email}/><Field label="Điện thoại" value={data.profile.phone}/><Field label="Công ty" value={data.profile.company}/><Field label="Ngày tham gia" value={new Date(data.profile.joinedAt).toLocaleDateString('vi-VN')}/></div>}
-            {tab === 'info' && draft && <div className={styles.editForm}><label>Tên hiển thị<input value={draft.name} onChange={(event) => setDraft({ ...draft, name: event.target.value })}/></label><label>Tài khoản<input value={draft.username} disabled /></label><label>Email<input type="email" value={draft.email} onChange={(event) => setDraft({ ...draft, email: event.target.value })}/></label><label>Điện thoại<input value={draft.phone} onChange={(event) => setDraft({ ...draft, phone: event.target.value })}/></label><label className={styles.wideField}>Công ty<input value={draft.company} onChange={(event) => setDraft({ ...draft, company: event.target.value })}/></label><div className={styles.editActions}><button type="button" className={styles.saveButton} disabled={updateProfile.isPending} onClick={saveProfile}>{updateProfile.isPending ? 'Đang lưu...' : 'Lưu thay đổi'}</button><button type="button" className={styles.cancelButton} onClick={cancelEdit}>Hủy</button></div>{updateProfile.error && <p className={styles.formError}>{updateProfile.error.message}</p>}</div>}
-            {tab === 'wallet' && <div className={styles.wallet}><article><span>Số dư khả dụng</span><strong>{money.format(data.wallet.balance)}</strong><small>Có thể dùng để thanh toán đơn thuê mới.</small></article><article><span>Đang giữ cho đơn thuê</span><strong>{money.format(data.wallet.reserved)}</strong><small>Số tiền tạm giữ cho các giao dịch đang xử lý.</small></article><button type="button">Nạp tiền vào ví (UI mock)</button></div>}
-            {tab === 'transactions' && <><DateFilter fromDate={fromDate} toDate={toDate} setFromDate={setFromDate} setToDate={setToDate}/><Table headers={['Mã','Nội dung','Loại','Số tiền','Ngày','Trạng thái']} rows={transactions.map((item) => [item.id,item.description,item.type,money.format(item.amount),new Date(item.createdAt).toLocaleString('vi-VN'),item.status])}/></>}
-            {tab === 'topups' && <><DateFilter fromDate={fromDate} toDate={toDate} setFromDate={setFromDate} setToDate={setToDate}/><Table headers={['Mã','Phương thức','Số tiền','Ngày','Trạng thái']} rows={topups.map((item) => [item.id,item.method,money.format(item.amount),new Date(item.createdAt).toLocaleString('vi-VN'),item.status])}/></>}
-            {tab === 'notifications' && <div className={styles.notifications}>{data.notifications.map((item) => <article key={item.id} className={!item.read ? styles.unread : ''}><span className={styles.noticeDot} aria-hidden="true"/><div><h3>{item.title}</h3><p>{item.message}</p></div><time>{new Date(item.createdAt).toLocaleString('vi-VN')}</time></article>)}</div>}
-          </div>
-        </section>
-      </div>
-    </main>
-  );
+export function ProfilePage(){
+const{data,isLoading}=useAccountDashboard();const updateProfile=useUpdateAccountProfile();const[tab,setTab]=useState<Tab>('info');const[draft,setDraft]=useState<CustomerProfile|null>(null);const[fromDate,setFromDate]=useState('');const[toDate,setToDate]=useState('');const[page,setPage]=useState(1);const[selectedPackage,setSelectedPackage]=useState('POINT-2200');
+const unreadCount=useMemo(()=>data?.notifications.filter((item)=>!item.read).length??0,[data]);if(isLoading||!data)return <main className={styles.page}>Đang tải hồ sơ...</main>;
+const activeTab=accountTabs.find((item)=>item.id===tab)??accountTabs[0];const initials=data.profile.name.split(' ').filter(Boolean).slice(0,2).map((part)=>part[0]?.toUpperCase()).join('')||'U';const transactions=data.transactions.filter((item)=>inDateRange(item.createdAt,fromDate,toDate));const topups=data.topups.filter((item)=>inDateRange(item.createdAt,fromDate,toDate));const changeTab=(next:Tab)=>{setTab(next);setPage(1);};const beginEdit=()=>setDraft({...data.profile});const saveProfile=async()=>{if(!draft)return;await updateProfile.mutateAsync(draft);setDraft(null);};const selected=data.pointPackages.find((item)=>item.id===selectedPackage)??data.pointPackages[0];
+return <main className={styles.page}><div className={styles.accountLayout}><aside className={styles.sidebar}><div className={styles.profileCard}><div className={styles.avatar}>{initials}</div><div className={styles.profileIdentity}><span>TÀI KHOẢN</span><h1>{data.profile.name}</h1><p>@{data.profile.username}</p></div><div className={styles.profileMeta}><span>{data.profile.email}</span><span>{data.profile.company}</span></div></div><nav className={styles.tabs}>{accountTabs.map((item)=><button type="button" className={tab===item.id?styles.active:''} key={item.id} onClick={()=>changeTab(item.id)}><span className={styles.tabText}><strong>{item.label}</strong><small>{item.description}</small></span>{item.id==='notifications'&&unreadCount>0?<b className={styles.badge}>{unreadCount}</b>:<span className={styles.chevron}>›</span>}</button>)}</nav></aside><section className={styles.content}><header className={styles.contentHeader}><div><span>TRUNG TÂM TÀI KHOẢN</span><h2>{activeTab.label}</h2><p>{activeTab.description}</p></div>{tab==='wallet'&&<div className={styles.balanceChip}><span>Số dư</span><strong>{money.format(data.wallet.balance)}</strong></div>}{tab==='info'&&!draft&&<button type="button" className={styles.headerAction} onClick={beginEdit}>Chỉnh sửa thông tin</button>}</header><div className={styles.panel}>
+{tab==='info'&&!draft&&<div className={styles.infoGrid}><Field label="Tên hiển thị" value={data.profile.name}/><Field label="Tài khoản" value={data.profile.username}/><Field label="Email" value={data.profile.email}/><Field label="Điện thoại" value={data.profile.phone}/><Field label="Công ty" value={data.profile.company}/><Field label="Ngày tham gia" value={new Date(data.profile.joinedAt).toLocaleDateString('vi-VN')}/></div>}
+{tab==='info'&&draft&&<div className={styles.editForm}><label>Tên hiển thị<input value={draft.name} onChange={(e)=>setDraft({...draft,name:e.target.value})}/></label><label>Tài khoản<input value={draft.username} disabled/></label><label>Email<input value={draft.email} onChange={(e)=>setDraft({...draft,email:e.target.value})}/></label><label>Điện thoại<input value={draft.phone} onChange={(e)=>setDraft({...draft,phone:e.target.value})}/></label><label className={styles.wideField}>Công ty<input value={draft.company} onChange={(e)=>setDraft({...draft,company:e.target.value})}/></label><div className={styles.editActions}><button className={styles.saveButton} type="button" onClick={saveProfile}>Lưu thay đổi</button><button className={styles.cancelButton} type="button" onClick={()=>setDraft(null)}>Hủy</button></div></div>}
+{tab==='wallet'&&<div className={styles.wallet}><article><span>Số dư khả dụng</span><strong>{money.format(data.wallet.balance)}</strong><small>Dùng thanh toán trực tiếp.</small></article><article><span>Đang giữ</span><strong>{money.format(data.wallet.reserved)}</strong><small>Tạm giữ cho giao dịch.</small></article><article className={styles.pointsBalance}><span>Points / Coins</span><strong>{data.wallet.points.toLocaleString('vi-VN')} P</strong><small>1 point ≈ {money.format(data.wallet.pointValue)} giá trị giảm.</small></article><button type="button" onClick={()=>changeTab('points')}>Mua points / quét QR</button></div>}
+{tab==='points'&&<><div className={styles.pointPackages}>{data.pointPackages.map((item)=><button type="button" key={item.id} className={selected?.id===item.id?styles.packageActive:''} onClick={()=>setSelectedPackage(item.id)}><span>{item.badge??'Gói points'}</span><strong>{(item.points+item.bonusPoints).toLocaleString('vi-VN')} P</strong><small>{money.format(item.price)} · bonus {item.bonusPoints} P</small></button>)}</div>{selected&&<div className={styles.pointQr}><img src="/images/payments/qr-bank.svg" alt="QR mua points mẫu"/><div><span>QUÉT QR MUA POINTS</span><h3>{selected.name} · {(selected.points+selected.bonusPoints).toLocaleString('vi-VN')} P</h3><p>Thanh toán mẫu {money.format(selected.price)}. Backend sau này sẽ cộng points sau khi webhook xác nhận.</p></div></div>}<PaginatedTable page={page} setPage={setPage} headers={['Mã','Nội dung','Points','Ngày','Trạng thái']} rows={data.pointHistory.map((item)=>[item.id,item.description,`${item.points>0?'+':''}${item.points} P`,new Date(item.createdAt).toLocaleString('vi-VN'),item.status])}/></>}
+{tab==='vouchers'&&<PaginatedCards page={page} setPage={setPage} items={data.vouchers.map((item)=><article className={styles.voucher} key={item.id}><div><span>{item.status}</span><h3>{item.code}</h3><strong>{item.title}</strong><p>{item.description}</p></div><small>Đơn tối thiểu {money.format(item.minSpend)} · HSD {new Date(item.expiresAt).toLocaleDateString('vi-VN')}</small></article>)}/>} 
+{tab==='transactions'&&<><DateFilter fromDate={fromDate} toDate={toDate} setFromDate={(v)=>{setFromDate(v);setPage(1);}} setToDate={(v)=>{setToDate(v);setPage(1);}}/><PaginatedTable page={page} setPage={setPage} headers={['Mã','Nội dung','Loại','Số tiền','Ngày','Trạng thái']} rows={transactions.map((item)=>[item.id,item.description,item.type,money.format(item.amount),new Date(item.createdAt).toLocaleString('vi-VN'),item.status])}/></>}
+{tab==='topups'&&<><DateFilter fromDate={fromDate} toDate={toDate} setFromDate={(v)=>{setFromDate(v);setPage(1);}} setToDate={(v)=>{setToDate(v);setPage(1);}}/><PaginatedTable page={page} setPage={setPage} headers={['Mã','Phương thức','Số tiền','Ngày','Trạng thái']} rows={topups.map((item)=>[item.id,item.method,money.format(item.amount),new Date(item.createdAt).toLocaleString('vi-VN'),item.status])}/></>}
+{tab==='notifications'&&<PaginatedCards page={page} setPage={setPage} items={data.notifications.map((item)=><article key={item.id} className={`${styles.noticeCard} ${!item.read?styles.unread:''}`}><div><h3>{item.title}</h3><p>{item.message}</p></div><time>{new Date(item.createdAt).toLocaleString('vi-VN')}</time></article>)}/>} 
+</div></section></div></main>;
 }
-
-function inDateRange(value: string, fromDate: string, toDate: string) {
-  const time = new Date(value).getTime();
-  const from = fromDate ? new Date(`${fromDate}T00:00:00`).getTime() : Number.NEGATIVE_INFINITY;
-  const to = toDate ? new Date(`${toDate}T23:59:59`).getTime() : Number.POSITIVE_INFINITY;
-  return time >= from && time <= to;
-}
-
-function DateFilter({ fromDate, toDate, setFromDate, setToDate }: { fromDate:string; toDate:string; setFromDate:(value:string)=>void; setToDate:(value:string)=>void; }) {
-  return <div className={styles.dateFilter}><div><span>Lọc theo ngày</span><p>Chọn khoảng thời gian cần xem.</p></div><label>Từ ngày<input type="date" value={fromDate} onChange={(event) => setFromDate(event.target.value)}/></label><label>Đến ngày<input type="date" value={toDate} min={fromDate || undefined} onChange={(event) => setToDate(event.target.value)}/></label><button type="button" onClick={() => { setFromDate(''); setToDate(''); }}>Xóa lọc</button></div>;
-}
-function Field({ label, value }: { label:string; value:string }) { return <article className={styles.field}><span>{label}</span><strong>{value}</strong></article>; }
-function Table({ headers, rows }: { headers:string[]; rows:string[][] }) { return <div className={styles.tableWrap}><table><thead><tr>{headers.map((header) => <th key={header}>{header}</th>)}</tr></thead><tbody>{rows.length ? rows.map((row,rowIndex) => <tr key={`${rowIndex}-${row.join('|')}`}>{row.map((cell,index) => <td key={`${rowIndex}-${index}`}>{cell}</td>)}</tr>) : <tr><td colSpan={headers.length} className={styles.emptyCell}>Không có dữ liệu trong khoảng thời gian đã chọn.</td></tr>}</tbody></table></div>; }
+function inDateRange(value:string,fromDate:string,toDate:string){const time=new Date(value).getTime();const from=fromDate?new Date(`${fromDate}T00:00:00`).getTime():-Infinity;const to=toDate?new Date(`${toDate}T23:59:59`).getTime():Infinity;return time>=from&&time<=to;}
+function DateFilter({fromDate,toDate,setFromDate,setToDate}:{fromDate:string;toDate:string;setFromDate:(v:string)=>void;setToDate:(v:string)=>void}){return <div className={styles.dateFilter}><div><span>Lọc theo ngày</span><p>Chọn khoảng thời gian cần xem.</p></div><label>Từ ngày<input type="date" value={fromDate} onChange={(e)=>setFromDate(e.target.value)}/></label><label>Đến ngày<input type="date" value={toDate} onChange={(e)=>setToDate(e.target.value)}/></label><button type="button" onClick={()=>{setFromDate('');setToDate('');}}>Xóa lọc</button></div>;}
+function Field({label,value}:{label:string;value:string}){return <article className={styles.field}><span>{label}</span><strong>{value}</strong></article>;}
+function Pagination({page,count,setPage}:{page:number;count:number;setPage:(v:number)=>void}){return <div className={styles.pagination}>{Array.from({length:Math.max(1,count)},(_,i)=>i+1).map((n)=><button type="button" key={n} className={n===page?styles.pageActive:''} onClick={()=>setPage(n)}>{n}</button>)}</div>;}
+function PaginatedTable({headers,rows,page,setPage}:{headers:string[];rows:string[][];page:number;setPage:(v:number)=>void}){const count=Math.max(1,Math.ceil(rows.length/PAGE_SIZE));const safe=Math.min(page,count);const visible=rows.slice((safe-1)*PAGE_SIZE,safe*PAGE_SIZE);return <><div className={styles.tableWrap}><table><thead><tr>{headers.map((h)=><th key={h}>{h}</th>)}</tr></thead><tbody>{visible.map((row,i)=><tr key={`${i}-${row.join('|')}`}>{row.map((c,j)=><td key={`${i}-${j}`}>{c}</td>)}</tr>)}</tbody></table></div><Pagination page={safe} count={count} setPage={setPage}/></>;}
+function PaginatedCards({items,page,setPage}:{items:React.ReactNode[];page:number;setPage:(v:number)=>void}){const count=Math.max(1,Math.ceil(items.length/PAGE_SIZE));const safe=Math.min(page,count);return <><div className={styles.cardList}>{items.slice((safe-1)*PAGE_SIZE,safe*PAGE_SIZE)}</div><Pagination page={safe} count={count} setPage={setPage}/></>;}
