@@ -1,4 +1,4 @@
-import { useEffect, useSyncExternalStore } from 'react';
+import { useEffect, useState, useSyncExternalStore } from 'react';
 import { createPortal } from 'react-dom';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/constants/route.constants';
@@ -14,23 +14,10 @@ const links = [
 ];
 
 export function Navigation() {
-  const [isOpen, setIsOpen] = useSyncExternalStore(
-    (listener) => {
-      const handler = () => listener();
-      window.addEventListener('rentora-navigation-toggle', handler);
-      return () => window.removeEventListener('rentora-navigation-toggle', handler);
-    },
-    () => document.body.dataset.navigationOpen === 'true',
-    () => false,
-  );
+  const [isOpen, setIsOpen] = useState(false);
   const session = useSyncExternalStore(authStore.subscribe, authStore.getSession, () => null);
   const navigate = useNavigate();
-
-  const setOpen = (open: boolean) => {
-    document.body.dataset.navigationOpen = String(open);
-    window.dispatchEvent(new Event('rentora-navigation-toggle'));
-  };
-  const close = () => setOpen(false);
+  const close = () => setIsOpen(false);
 
   useEffect(() => {
     if (!isOpen) return undefined;
@@ -118,7 +105,7 @@ export function Navigation() {
         aria-expanded={isOpen}
         aria-label="Mở menu điều hướng"
         className={styles.toggle}
-        onClick={() => setOpen(!isOpen)}
+        onClick={() => setIsOpen((open) => !open)}
         type="button"
       >
         <span />
