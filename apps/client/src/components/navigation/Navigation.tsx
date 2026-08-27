@@ -14,16 +14,47 @@ const links = [
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
   const close = () => setIsOpen(false);
+
   return (
-    <nav aria-label="Primary navigation" className={styles.navigation}>
-      <div className={styles.desktopLinks}>
-        {links.map((link) => <NavLink end={link.to === ROUTES.home} key={link.label} to={link.to}>{link.label}</NavLink>)}
-      </div>
-      <button aria-controls="mobile-navigation" aria-expanded={isOpen} aria-label="Toggle navigation" className={styles.toggle} onClick={() => setIsOpen((open) => !open)} type="button"><span /><span /><span /></button>
-      <div className={`${styles.drawer} ${isOpen ? styles.open : ''}`} id="mobile-navigation">
-        {links.map((link) => <NavLink end={link.to === ROUTES.home} key={link.label} onClick={close} to={link.to}>{link.label}</NavLink>)}
-        <NavLink className={styles.login} onClick={close} to={ROUTES.login}>Đăng nhập</NavLink>
-      </div>
-    </nav>
+    <div className={styles.navigation}>
+      <button
+        aria-controls="primary-navigation-drawer"
+        aria-expanded={isOpen}
+        aria-label="Mở menu điều hướng"
+        className={`${styles.toggle} ${isOpen ? styles.toggleOpen : ''}`}
+        onClick={() => setIsOpen((open) => !open)}
+        type="button"
+      >
+        <span />
+        <span />
+        <span />
+      </button>
+
+      <button
+        type="button"
+        aria-label="Đóng menu"
+        className={`${styles.backdrop} ${isOpen ? styles.backdropOpen : ''}`}
+        onClick={close}
+      />
+
+      <aside className={`${styles.drawer} ${isOpen ? styles.open : ''}`} id="primary-navigation-drawer">
+        <div className={styles.drawerHeader}>
+          <div><span>RENTORA</span><strong>Điều hướng</strong></div>
+          <button type="button" onClick={close}>Đóng</button>
+        </div>
+        <nav aria-label="Primary navigation">
+          {links.map((link) => (
+            <NavLink end={link.to === ROUTES.home} key={link.label} onClick={close} to={link.to}>
+              <span>{link.label}</span>
+              <b aria-hidden="true">›</b>
+            </NavLink>
+          ))}
+        </nav>
+        <div className={styles.drawerFooter}>
+          <NavLink onClick={close} to={ROUTES.profile}>Tài khoản</NavLink>
+          <NavLink onClick={close} to={ROUTES.login}>Đăng nhập</NavLink>
+        </div>
+      </aside>
+    </div>
   );
 }

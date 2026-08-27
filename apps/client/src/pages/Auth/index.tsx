@@ -13,11 +13,7 @@ function AuthShell({ children, title, subtitle }: { children: React.ReactNode; t
 }
 
 interface LoginLocationState {
-  from?: {
-    pathname: string;
-    search?: string;
-    hash?: string;
-  };
+  from?: { pathname: string; search?: string; hash?: string };
 }
 
 export function LoginPage() {
@@ -34,17 +30,13 @@ export function LoginPage() {
     event.preventDefault();
     setError('');
     setPending(true);
-
     try {
       const session = await authUiService.login(username, password);
       authStore.setSession(session);
       if (remember) localStorage.setItem('machine-rental-remembered-username', username);
       else localStorage.removeItem('machine-rental-remembered-username');
-
       const from = (location.state as LoginLocationState | null)?.from;
-      const target = from
-        ? `${from.pathname}${from.search ?? ''}${from.hash ?? ''}`
-        : ROUTES.home;
+      const target = from ? `${from.pathname}${from.search ?? ''}${from.hash ?? ''}` : ROUTES.home;
       navigate(target, { replace: true });
     } catch (loginError) {
       setError(loginError instanceof Error ? loginError.message : 'Không thể đăng nhập.');
@@ -53,7 +45,7 @@ export function LoginPage() {
     }
   };
 
-  return <AuthShell title="Đăng nhập" subtitle="Đăng nhập trước khi đặt thuê hoặc thanh toán máy chủ."><div className={styles.demoHint}>Tài khoản demo <strong>admin</strong><span>Mật khẩu <strong>admin</strong></span></div><form className={styles.form} onSubmit={submit}><label>Tài khoản<input value={username} onChange={(event) => setUsername(event.target.value)} placeholder="admin" autoComplete="username" /></label><label>Mật khẩu<span className={styles.password}><input type={showPassword ? 'text' : 'password'} value={password} onChange={(event) => setPassword(event.target.value)} placeholder="admin" autoComplete="current-password" /><button type="button" onClick={() => setShowPassword(!showPassword)}>{showPassword ? 'Ẩn' : 'Hiện'}</button></span></label><div className={styles.row}><label className={styles.checkbox}><input type="checkbox" checked={remember} onChange={(event) => setRemember(event.target.checked)} /> Ghi nhớ tài khoản</label><a href="#forgot">Quên mật khẩu?</a></div>{error && <p className={styles.error}>{error}</p>}<button className={styles.submit} type="submit" disabled={pending}>{pending ? 'Đang đăng nhập...' : 'Đăng nhập'}</button></form><div className={styles.divider}><span>Hoặc tiếp tục với</span></div><div className={styles.socials}><button type="button" onClick={() => setError('Google OAuth sẽ được kết nối ở bước tích hợp backend.')}>G Google</button><button type="button" onClick={() => setError('Facebook OAuth sẽ được kết nối ở bước tích hợp backend.')}>f Facebook</button></div><p className={styles.switch}>Chưa có tài khoản? <Link to={ROUTES.register}>Đăng ký ngay</Link></p></AuthShell>;
+  return <AuthShell title="Đăng nhập" subtitle="Đăng nhập trước khi đặt thuê hoặc thanh toán máy chủ."><form className={styles.form} onSubmit={submit}><label>Tài khoản<input value={username} onChange={(event) => setUsername(event.target.value)} placeholder="Tài khoản" autoComplete="username" /></label><label>Mật khẩu<span className={styles.password}><input type={showPassword ? 'text' : 'password'} value={password} onChange={(event) => setPassword(event.target.value)} placeholder="Mật khẩu" autoComplete="current-password" /><button type="button" onClick={() => setShowPassword(!showPassword)}>{showPassword ? 'Ẩn' : 'Hiện'}</button></span></label><div className={styles.row}><label className={styles.checkbox}><input type="checkbox" checked={remember} onChange={(event) => setRemember(event.target.checked)} /> Ghi nhớ tài khoản</label><a href="#forgot">Quên mật khẩu?</a></div>{error && <p className={styles.error}>{error}</p>}<button className={styles.submit} type="submit" disabled={pending}>{pending ? 'Đang đăng nhập...' : 'Đăng nhập'}</button></form><div className={styles.divider}><span>Hoặc tiếp tục với</span></div><div className={styles.socials}><button type="button" onClick={() => setError('Google OAuth sẽ được kết nối ở bước tích hợp backend.')}>G Google</button><button type="button" onClick={() => setError('Facebook OAuth sẽ được kết nối ở bước tích hợp backend.')}>f Facebook</button></div><p className={styles.switch}>Chưa có tài khoản? <Link to={ROUTES.register}>Đăng ký ngay</Link></p></AuthShell>;
 }
 
 export function RegisterPage() {

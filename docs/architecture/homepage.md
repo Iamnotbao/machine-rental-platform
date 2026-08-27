@@ -1,9 +1,17 @@
 # Client homepage architecture
 
-The Client homepage is composed at `pages/Home/Home.tsx` and currently contains `Hero`, `FeaturedMachines`, `AboutPreview`, and `BlogCarousel` sections.
+The Client homepage is composed at `pages/Home/Home.tsx`. Landing-page content remains split into independent sections so it can evolve without turning the route into one large component.
 
-`AboutPreview` introduces the product and links to the dedicated `/about` page. `BlogCarousel` consumes the blog feature hook, shows three cards per logical page on desktop, supports previous/next controls and numbered pages, auto-advances every 4.5 seconds, and pauses while hovered or keyboard-focused.
+The global customer shell now renders an `AnnouncementBanner` above the sticky header. Its active messages come from `features/announcements` through `mock data -> service -> TanStack Query hook -> banner`, which is the seam for the future Admin/Backend announcement API. The ticker pauses while hovered or focused and respects reduced-motion preferences.
 
-Blog data is UI-first under `features/blogs/data`, accessed through `blog-ui.service.ts` and TanStack Query hooks. News listing and blog-detail pages therefore do not depend directly on mock arrays and can later switch to Backend APIs through the service boundary.
+The header uses a left-side hamburger navigation drawer on desktop and mobile. The drawer owns primary navigation links while account/login and the rent action remain available from the header.
 
-The homepage machine/provider section continues to use machine mock data until the machine backend is connected.
+Homepage content includes the hero, featured providers/machines, introduction content, and the blog/news carousel. Blog data follows `mock data -> service -> hook -> page/component`, including category filtering, pagination, article detail, and related articles.
+
+## Shared UI
+
+`packages/ui` contains only app-neutral primitives. Domain-specific machine, blog, payment, account, and announcement presentation stays in Client feature/page layers.
+
+## Animation strategy
+
+`hooks/useIntersectionObserver.ts` and `components/motion/Reveal.tsx` provide viewport entry motion. Carousel/ticker animation pauses on user interaction and CSS disables continuous motion when `prefers-reduced-motion` is enabled.
