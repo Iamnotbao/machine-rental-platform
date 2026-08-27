@@ -1,0 +1,10 @@
+{
+  "buildCommand": "npm run build:client",
+  "outputDirectory": "apps/client/dist",
+  "rewrites": [
+    {
+      "source": "/((?!assets/|images/|favicon\\.ico).*)",
+      "destination": "/index.html"
+    }
+  ]
+}
