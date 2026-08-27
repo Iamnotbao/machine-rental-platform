@@ -2,7 +2,6 @@ import { useEffect, useState, useSyncExternalStore } from 'react';
 import { createPortal } from 'react-dom';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/constants/route.constants';
-import { MOCK_CONTENT_IMAGE_URL } from '@/config/assets';
 import { accountDashboard } from '@/features/account/data/account.mock';
 import { authStore } from '@/store/auth/auth.store';
 import styles from './navigation.module.css';
@@ -25,14 +24,11 @@ export function Navigation() {
 
   useEffect(() => {
     if (!isOpen) return undefined;
-
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
-
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') close();
     };
-
     window.addEventListener('keydown', handleKeyDown);
     return () => {
       document.body.style.overflow = previousOverflow;
@@ -55,13 +51,7 @@ export function Navigation() {
 
   const overlay = (
     <>
-      <button
-        type="button"
-        aria-label="Đóng menu"
-        className={`${styles.backdrop} ${isOpen ? styles.backdropOpen : ''}`}
-        onClick={close}
-      />
-
+      <button type="button" aria-label="Đóng menu" className={`${styles.backdrop} ${isOpen ? styles.backdropOpen : ''}`} onClick={close} />
       <aside className={`${styles.drawer} ${isOpen ? styles.open : ''}`} id="primary-navigation-drawer">
         <div className={styles.drawerHeader}>
           <div><span>RENTORA</span><strong>Điều hướng</strong></div>
@@ -70,7 +60,6 @@ export function Navigation() {
 
         {session ? (
           <section className={styles.memberCard}>
-            <div className={styles.memberCover} style={{ backgroundImage: `url(${MOCK_CONTENT_IMAGE_URL})` }} />
             <NavLink className={styles.memberProfileLink} onClick={close} to={ROUTES.profile}>
               <div className={styles.avatar} aria-hidden="true">{initials}</div>
               <div className={styles.memberCopy}>
@@ -99,12 +88,10 @@ export function Navigation() {
         <nav aria-label="Primary navigation">
           {links.map((link) => (
             <NavLink end={link.to === ROUTES.home} key={link.label} onClick={close} to={link.to}>
-              <span>{link.label}</span>
-              <b aria-hidden="true">›</b>
+              <span>{link.label}</span><b aria-hidden="true">›</b>
             </NavLink>
           ))}
         </nav>
-
         {session && <button className={styles.drawerLogout} type="button" onClick={logout}>Đăng xuất tài khoản</button>}
       </aside>
     </>
@@ -112,17 +99,8 @@ export function Navigation() {
 
   return (
     <div className={styles.navigation}>
-      <button
-        aria-controls="primary-navigation-drawer"
-        aria-expanded={isOpen}
-        aria-label="Mở menu điều hướng"
-        className={styles.toggle}
-        onClick={() => setIsOpen((open) => !open)}
-        type="button"
-      >
-        <span />
-        <span />
-        <span />
+      <button aria-controls="primary-navigation-drawer" aria-expanded={isOpen} aria-label="Mở menu điều hướng" className={styles.toggle} onClick={() => setIsOpen((open) => !open)} type="button">
+        <span /><span /><span />
       </button>
       {createPortal(overlay, document.body)}
     </div>
