@@ -23,12 +23,9 @@ export function Header() {
   return (
     <header className={styles.header}>
       <div className={`${styles.content} page-container`}>
-        <div className={styles.leftCluster}>
-          <Navigation />
-          <Link aria-label={`${APP_NAME} home`} className="brand" to={ROUTES.home}>
-            RENT<span>ORA</span>
-          </Link>
-        </div>
+        <Link aria-label={`${APP_NAME} home`} className="brand" to={ROUTES.home}>
+          RENT<span>ORA</span>
+        </Link>
 
         <div className={styles.actions}>
           <LanguageSwitcher />
@@ -45,6 +42,8 @@ export function Header() {
           <Link className={styles.rentAction} to={ROUTES.machines}>
             <Button>{t('common.rent_now')}</Button>
           </Link>
+
+          <Navigation />
         </div>
       </div>
     </header>
