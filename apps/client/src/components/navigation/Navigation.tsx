@@ -2,6 +2,8 @@ import { useEffect, useState, useSyncExternalStore } from 'react';
 import { createPortal } from 'react-dom';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/constants/route.constants';
+import { MOCK_CONTENT_IMAGE_URL } from '@/config/assets';
+import { accountDashboard } from '@/features/account/data/account.mock';
 import { authStore } from '@/store/auth/auth.store';
 import styles from './navigation.module.css';
 
@@ -12,6 +14,8 @@ const links = [
   { label: 'Tin tức', to: ROUTES.news },
   { label: 'Liên hệ', to: ROUTES.contact },
 ];
+
+const pointsFormatter = new Intl.NumberFormat('vi-VN');
 
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
@@ -65,24 +69,26 @@ export function Navigation() {
         </div>
 
         {session ? (
-          <section className={styles.accountCard}>
-            <div className={styles.accountTop}>
+          <section className={styles.memberCard}>
+            <div className={styles.memberCover} style={{ backgroundImage: `url(${MOCK_CONTENT_IMAGE_URL})` }} />
+            <NavLink className={styles.memberProfileLink} onClick={close} to={ROUTES.profile}>
               <div className={styles.avatar} aria-hidden="true">{initials}</div>
-              <div className={styles.accountCopy}>
-                <span><i aria-hidden="true" /> ĐANG ĐĂNG NHẬP</span>
+              <div className={styles.memberCopy}>
+                <span>TÀI KHOẢN RENTORA</span>
                 <strong>{session.user.name}</strong>
                 <small>{session.user.email}</small>
               </div>
-            </div>
-            <div className={styles.accountActions}>
-              <NavLink className={styles.accountLink} onClick={close} to={ROUTES.profile}>Tài khoản</NavLink>
-              <button className={styles.logoutButton} type="button" onClick={logout}>Đăng xuất</button>
+              <span className={styles.profileArrow} aria-hidden="true">›</span>
+            </NavLink>
+            <div className={styles.memberStats}>
+              <div><span>POINTS / COINS</span><strong>{pointsFormatter.format(accountDashboard.wallet.points)} P</strong></div>
+              <div><span>QUY ĐỔI</span><strong>1 P = {accountDashboard.wallet.pointValue} ₫</strong></div>
             </div>
           </section>
         ) : (
           <section className={styles.guestCard}>
             <span>TÀI KHOẢN</span>
-            <strong>Đăng nhập để quản lý máy thuê và ví</strong>
+            <strong>Đăng nhập để quản lý máy thuê, ví và Points.</strong>
             <div>
               <NavLink onClick={close} to={ROUTES.login}>Đăng nhập</NavLink>
               <NavLink onClick={close} to={ROUTES.register}>Đăng ký</NavLink>
@@ -98,6 +104,8 @@ export function Navigation() {
             </NavLink>
           ))}
         </nav>
+
+        {session && <button className={styles.drawerLogout} type="button" onClick={logout}>Đăng xuất tài khoản</button>}
       </aside>
     </>
   );
