@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { NavLink } from 'react-router-dom';
 import { ROUTES } from '@/constants/route.constants';
 import styles from './navigation.module.css';
@@ -15,21 +16,26 @@ export function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
   const close = () => setIsOpen(false);
 
-  return (
-    <div className={styles.navigation}>
-      <button
-        aria-controls="primary-navigation-drawer"
-        aria-expanded={isOpen}
-        aria-label="Mở menu điều hướng"
-        className={`${styles.toggle} ${isOpen ? styles.toggleOpen : ''}`}
-        onClick={() => setIsOpen((open) => !open)}
-        type="button"
-      >
-        <span />
-        <span />
-        <span />
-      </button>
+  useEffect(() => {
+    if (!isOpen) return undefined;
 
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') close();
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isOpen]);
+
+  const overlay = (
+    <>
       <button
         type="button"
         aria-label="Đóng menu"
@@ -55,6 +61,25 @@ export function Navigation() {
           <NavLink onClick={close} to={ROUTES.login}>Đăng nhập</NavLink>
         </div>
       </aside>
+    </>
+  );
+
+  return (
+    <div className={styles.navigation}>
+      <button
+        aria-controls="primary-navigation-drawer"
+        aria-expanded={isOpen}
+        aria-label="Mở menu điều hướng"
+        className={`${styles.toggle} ${isOpen ? styles.toggleOpen : ''}`}
+        onClick={() => setIsOpen((open) => !open)}
+        type="button"
+      >
+        <span />
+        <span />
+        <span />
+      </button>
+
+      {createPortal(overlay, document.body)}
     </div>
   );
 }
